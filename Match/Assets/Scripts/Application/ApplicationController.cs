@@ -17,7 +17,7 @@ public class ApplicationController : MonoBehaviour
     {
         SlotViewFactory slotFactory = new SlotViewFactory();
 
-        BoardViewFactory factory = new BoardViewFactory(slotFactory, 5, 5, transform);
+        BoardViewFactory factory = new BoardViewFactory(slotFactory, model.Rows, model.Columns, transform);
         IBoardView view = factory.View;
     }
 }

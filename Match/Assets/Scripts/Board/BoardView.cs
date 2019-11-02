@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class BoardView : MonoBehaviour, IBoardView
 {
-
+    public SlotView[,] Slots { get; private set; }
 }
 
 public interface IBoardView { }
@@ -20,6 +20,7 @@ public class BoardViewFactory : IBoardViewFactory
     readonly int rows;
     readonly int columns;
     readonly Transform transform;
+
 
     public BoardViewFactory(ISlotViewFactory slotFactory, int rows, int columns, Transform parent)
     {
