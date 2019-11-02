@@ -6,6 +6,8 @@ using System.Linq;
 
 public class ApplicationController : MonoBehaviour
 {
+    [SerializeField] ApplicationModel model;
+
     private void Awake()
     {
         CreateBoard();
