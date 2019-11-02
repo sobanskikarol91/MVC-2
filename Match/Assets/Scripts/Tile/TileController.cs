@@ -6,7 +6,7 @@ using System.Linq;
 
 public interface ITileController { }
 
-public class TileController : ITileController 
+public class TileController : ControllerMVC<ITileModel, ITileView>, ITileController
 {
-
+    public TileController(ITileModel model, ITileView view) : base(model, view) {  }
 }

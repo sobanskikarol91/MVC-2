@@ -8,5 +8,5 @@ public interface IBoardView { }
 
 public class BoardView : MonoBehaviour, IBoardView
 {
-
+    
 }

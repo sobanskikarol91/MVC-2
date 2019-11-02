@@ -8,5 +8,5 @@ public interface ISlotModel { }
 
 public class SlotModel : ISlotModel
 {
-
+    
 }
