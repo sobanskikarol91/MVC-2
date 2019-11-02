@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
+[CreateAssetMenu(fileName = "SlotModel", menuName = "Game/Slot/Model")]
 public class SlotModel : ScriptableObject, ISlotModel
 {
 

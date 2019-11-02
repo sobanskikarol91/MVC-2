@@ -17,11 +17,14 @@ public class ApplicationController : MonoBehaviour
     {
         int rows = settings.Rows;
         int columns = settings.Columns;
-        
-        BoardModelFactory modelBoardFactory = new BoardModelFactory(new SlotModelFactory(), rows, columns);
-        IBoardModel boardModel = modelBoardFactory.Model;
 
-        BoardViewFactory viewBoardfactory = new BoardViewFactory(new SlotViewFactory(), rows, columns, transform);
-        IBoardView boardView = viewBoardfactory.View;
+        BoardModelFactory modelFactory = new BoardModelFactory(new SlotModelFactory(), rows, columns);
+        IBoardModel model = modelFactory.Model;
+
+        BoardViewFactory viewFactory = new BoardViewFactory(new SlotViewFactory(), rows, columns, transform);
+        IBoardView view = viewFactory.View;
+
+        BoardControllerFactory controllerBoardFactory = new BoardControllerFactory();
+        IBoardController controller = controllerBoardFactory.Create(new SlotControllerFactory(), model, view);
     }
 }

@@ -8,10 +8,13 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class BoardView : MonoBehaviour, IBoardView
 {
-    public ISlotView[,] Slots { get; private set; }
+    public ISlotView[,] Slots { get; set; }
 }
 
-public interface IBoardView { }
+public interface IBoardView
+{
+    ISlotView[,] Slots { get; set; }
+}
 
 public class BoardViewFactory : IBoardViewFactory
 {
@@ -41,13 +44,17 @@ public class BoardViewFactory : IBoardViewFactory
 
     private void CreateSlots(ISlotViewFactory slotFactory)
     {
+        ISlotView[,] slots = new ISlotView[rows, columns];
+
         for (int r = 0; r < rows; r++)
         {
             for (int c = 0; c < columns; c++)
             {
-                slotFactory.Create(transform);
+                slots[r, c] = slotFactory.Create(transform);
             }
         }
+
+        View.Slots = slots;
     }
 }
 
