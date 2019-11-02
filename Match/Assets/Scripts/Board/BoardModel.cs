@@ -39,7 +39,7 @@ public class BoardModelFactory : IBoardModelFactory
         {
             for (int c = 0; c < columns; c++)
             {
-                slots[r, c] = slotFactory.Create();
+                slots[r, c] = slotFactory.Create(new Vector2(r,c));
             }
         }
 

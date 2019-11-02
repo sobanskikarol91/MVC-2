@@ -4,24 +4,34 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-[CreateAssetMenu(fileName = "SlotModel", menuName = "Game/Slot/Model")]
-public class SlotModel : ScriptableObject, ISlotModel
-{
 
+public class SlotModel : ISlotModel
+{
+    public Vector2 Position { get; }
+    public ITileModel Tile { get; }
+
+
+    public SlotModel(Vector2 position, ITileModel tile = null)
+    {
+        Position = position;
+        Tile = tile;
+    }
 }
 
-public interface ISlotModel { }
+public interface ISlotModel
+{
+    Vector2 Position { get; }
+}
 
 public class SlotModelFactory : ISlotModelFactory
 {
-    public ISlotModel Create()
+    public ISlotModel Create(Vector2 position)
     {
-        SlotModel original = Resources.Load<SlotModel>("Model/Slot");
-        return ScriptableObject.Instantiate(original);
+        return new SlotModel(position);
     }
 }
 
 public interface ISlotModelFactory
 {
-    ISlotModel Create();
+    ISlotModel Create(Vector2 position);
 }

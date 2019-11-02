@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   colorsAmount: 0
   seed: 4
-  height: 5
+  height: 11
   width: 6
   tileColors:
   - {r: 1, g: 0, b: 0, a: 1}

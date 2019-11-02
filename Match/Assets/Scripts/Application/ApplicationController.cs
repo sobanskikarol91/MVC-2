@@ -17,7 +17,7 @@ public class ApplicationController : MonoBehaviour
     {
         int rows = settings.Rows;
         int columns = settings.Columns;
-
+        
         BoardModelFactory modelFactory = new BoardModelFactory();
         IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
 
