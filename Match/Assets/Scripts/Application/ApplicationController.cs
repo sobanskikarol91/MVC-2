@@ -18,13 +18,13 @@ public class ApplicationController : MonoBehaviour
         int rows = settings.Rows;
         int columns = settings.Columns;
 
-        BoardModelFactory modelFactory = new BoardModelFactory(new SlotModelFactory(), rows, columns);
-        IBoardModel model = modelFactory.Model;
+        BoardModelFactory modelFactory = new BoardModelFactory();
+        IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
 
-        BoardViewFactory viewFactory = new BoardViewFactory(new SlotViewFactory(), rows, columns, transform);
-        IBoardView view = viewFactory.View;
+        BoardViewFactory viewFactory = new BoardViewFactory();
+        IBoardView view = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);
 
-        BoardControllerFactory controllerBoardFactory = new BoardControllerFactory();
-        IBoardController controller = controllerBoardFactory.Create(new SlotControllerFactory(), model, view);
+        BoardControllerFactory controllerFactory = new BoardControllerFactory();
+        IBoardController controller = controllerFactory.Create(new SlotControllerFactory(), model, view);
     }
 }

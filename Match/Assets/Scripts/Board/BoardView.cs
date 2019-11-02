@@ -40,31 +40,32 @@ public interface IBoardView
 
 public class BoardViewFactory : IBoardViewFactory
 {
-    public IBoardView View { get; private set; }
-
-    readonly int rows;
-    readonly int columns;
-    readonly Transform transform;
+    private int rows;
+    private int columns;
+    private Transform transform;
 
 
-    public BoardViewFactory(ISlotViewFactory slotFactory, int rows, int columns, Transform parent)
+    public IBoardView Create(ISlotViewFactory slotFactory, int rows, int columns, Transform parent)
     {
         this.rows = rows;
         this.columns = columns;
-        CreateSelf(parent, out transform);
-        CreateSlots(slotFactory);
+        IBoardView view = CreateSelf(parent, out transform);
+        view.Slots = GetAndCreateSlots(slotFactory);
+        return view;
     }
 
-    private void CreateSelf(Transform parent, out Transform transform)
+    IBoardView CreateSelf(Transform parent, out Transform transform)
     {
+        IBoardView view;
         GameObject prefab = Resources.Load<GameObject>("View/Board");
         transform = UnityEngine.Object.Instantiate(prefab).transform;
         transform.name = prefab.name;
         transform.transform.SetParent(parent);
-        View = transform.GetComponent<IBoardView>();
+        view = transform.GetComponent<IBoardView>();
+        return view;
     }
 
-    private void CreateSlots(ISlotViewFactory slotFactory)
+    private ISlotView[,] GetAndCreateSlots(ISlotViewFactory slotFactory)
     {
         ISlotView[,] slots = new ISlotView[rows, columns];
 
@@ -76,11 +77,11 @@ public class BoardViewFactory : IBoardViewFactory
             }
         }
 
-        View.Slots = slots;
+        return slots;
     }
 }
 
 public interface IBoardViewFactory
 {
-    IBoardView View { get; }
+    IBoardView Create(ISlotViewFactory slotFactory, int rows, int columns, Transform parent);
 }

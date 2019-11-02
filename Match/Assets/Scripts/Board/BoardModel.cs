@@ -26,14 +26,12 @@ public interface IBoardModel
 
 public interface IBoardModelFactory
 {
-    IBoardModel Model { get; }
+    IBoardModel Create(ISlotModelFactory slotFactory, int rows, int columns);
 }
 
 public class BoardModelFactory : IBoardModelFactory
 {
-    public IBoardModel Model { get; }
-
-    public BoardModelFactory(ISlotModelFactory slotFactory, int rows, int columns)
+    public IBoardModel Create(ISlotModelFactory slotFactory, int rows, int columns)
     {
         ISlotModel[,] slots = new ISlotModel[rows, columns];
 
@@ -45,6 +43,6 @@ public class BoardModelFactory : IBoardModelFactory
             }
         }
 
-        Model = new BoardModel(slots);
+        return new BoardModel(slots);
     }
 }
