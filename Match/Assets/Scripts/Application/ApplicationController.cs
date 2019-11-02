@@ -11,6 +11,12 @@ public class ApplicationController : MonoBehaviour
     private void Awake()
     {
         CreateBoard();
+        GenerateRandomTiles();
+    }
+
+    private void GenerateRandomTiles()
+    {
+        //TileModel[,] = SeedGenerator.SetRandomNotRepeatingCollection(); 
     }
 
     void CreateBoard()
