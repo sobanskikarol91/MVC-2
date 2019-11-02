@@ -12,16 +12,15 @@ public class ApplicationController : MonoBehaviour
         CreateSlots();
     }
 
-    private static void CreateSlots()
+    private void CreateSlots()
     {
-        SlotViewFactory factory = new SlotViewFactory();
-
+        SlotViewFactory factory = new SlotViewFactory(transform);
         ISlotView slot = factory.View;
     }
 
     void CreateBoard()
     {
-        BoardViewFactory factory = new BoardViewFactory();
+        BoardViewFactory factory = new BoardViewFactory(transform);
         IBoardView view = factory.View;
     }
 }

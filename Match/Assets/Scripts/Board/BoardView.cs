@@ -16,11 +16,12 @@ public class BoardViewFactory : IBoardViewFactory
 {
     public IBoardView View { get; private set; }
 
-    public BoardViewFactory()
+    public BoardViewFactory(Transform parent = null)
     {
         GameObject prefab = Resources.Load<GameObject>("View/Board");
         GameObject instance = UnityEngine.Object.Instantiate(prefab);
         instance.name = prefab.name;
+        instance.transform.SetParent(parent);
         View = instance.GetComponent<IBoardView>();
     }
 }
