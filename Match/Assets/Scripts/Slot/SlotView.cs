@@ -18,7 +18,9 @@ public class SlotViewFactory : ISlotViewFactory
 
     public SlotViewFactory()
     {
-        View = new SlotView();
+        GameObject prefab = Resources.Load<GameObject>("View/Slot");
+        GameObject instance = UnityEngine.Object.Instantiate(prefab);
+        View = instance.GetComponent<ISlotView>();
     }
 }
 

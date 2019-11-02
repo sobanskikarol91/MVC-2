@@ -6,4 +6,9 @@ using System.Linq;
 
 public class ApplicationController : MonoBehaviour 
 {
+    private void Awake()
+    {
+        SlotViewFactory factory = new SlotViewFactory();
+        ISlotView slot =  factory.View; 
+    }
 }
