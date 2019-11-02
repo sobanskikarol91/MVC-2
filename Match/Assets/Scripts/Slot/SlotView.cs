@@ -14,19 +14,17 @@ public interface ISlotView { }
 
 public class SlotViewFactory : ISlotViewFactory
 {
-    public ISlotView View { get; private set; }
-
-    public SlotViewFactory(Transform parent = null)
+    public ISlotView Create(Transform parent)
     {
         GameObject prefab = Resources.Load<GameObject>("View/Slot");
         GameObject instance = UnityEngine.Object.Instantiate(prefab);
         instance.name = prefab.name;
         instance.transform.SetParent(parent);
-        View = instance.GetComponent<ISlotView>();
+        return instance.GetComponent<ISlotView>();
     }
 }
 
 public interface ISlotViewFactory
 {
-    ISlotView View { get; }
+    ISlotView Create(Transform parent);
 }
