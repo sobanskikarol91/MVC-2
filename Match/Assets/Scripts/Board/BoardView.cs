@@ -49,18 +49,19 @@ public class BoardViewFactory : IBoardViewFactory
     {
         this.rows = rows;
         this.columns = columns;
-        IBoardView view = CreateSelf(parent, out transform);
+        this.transform = parent;
+        IBoardView view = CreateSelf(parent);
         view.Slots = GetAndCreateSlots(slotFactory);
         return view;
     }
 
-    IBoardView CreateSelf(Transform parent, out Transform transform)
+    IBoardView CreateSelf(Transform parent)
     {
         IBoardView view;
         GameObject prefab = Resources.Load<GameObject>("View/Board");
         transform = UnityEngine.Object.Instantiate(prefab).transform;
         transform.name = prefab.name;
-        transform.transform.SetParent(parent);
+        transform.transform.SetParent(parent, false);
         view = transform.GetComponent<IBoardView>();
         return view;
     }

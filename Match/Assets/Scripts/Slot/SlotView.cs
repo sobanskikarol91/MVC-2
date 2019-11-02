@@ -19,7 +19,7 @@ public class SlotViewFactory : ISlotViewFactory
         GameObject prefab = Resources.Load<GameObject>("View/Slot");
         GameObject instance = UnityEngine.Object.Instantiate(prefab);
         instance.name = prefab.name;
-        instance.transform.SetParent(parent);
+        instance.transform.SetParent(parent, false);
         return instance.GetComponent<ISlotView>();
     }
 }
