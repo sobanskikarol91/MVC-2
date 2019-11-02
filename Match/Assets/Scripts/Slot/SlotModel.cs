@@ -4,24 +4,23 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class SlotModel : ISlotModel
+public class SlotModel : ScriptableObject, ISlotModel
 {
-    
+
 }
 
 public interface ISlotModel { }
 
 public class SlotModelFactory : ISlotModelFactory
 {
-    public ISlotModel Model { get; private set; }
-
-    public SlotModelFactory()
+    public ISlotModel Create()
     {
-        Model = new SlotModel();
+        SlotModel original = Resources.Load<SlotModel>("Model/Slot");
+        return ScriptableObject.Instantiate(original);
     }
 }
 
 public interface ISlotModelFactory
 {
-    ISlotModel Model { get; }
+    ISlotModel Create();
 }

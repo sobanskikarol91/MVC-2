@@ -8,7 +8,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class BoardView : MonoBehaviour, IBoardView
 {
-    public SlotView[,] Slots { get; private set; }
+    public ISlotView[,] Slots { get; private set; }
 }
 
 public interface IBoardView { }

@@ -6,7 +6,7 @@ using System.Linq;
 
 public class ApplicationController : MonoBehaviour
 {
-    [SerializeField] ApplicationModel model;
+    [SerializeField] ApplicationModel settings;
 
     private void Awake()
     {
@@ -15,9 +15,13 @@ public class ApplicationController : MonoBehaviour
 
     void CreateBoard()
     {
-        SlotViewFactory slotFactory = new SlotViewFactory();
+        int rows = settings.Rows;
+        int columns = settings.Columns;
+        
+        BoardModelFactory modelBoardFactory = new BoardModelFactory(new SlotModelFactory(), rows, columns);
+        IBoardModel boardModel = modelBoardFactory.Model;
 
-        BoardViewFactory factory = new BoardViewFactory(slotFactory, model.Rows, model.Columns, transform);
-        IBoardView view = factory.View;
+        BoardViewFactory viewBoardfactory = new BoardViewFactory(new SlotViewFactory(), rows, columns, transform);
+        IBoardView boardView = viewBoardfactory.View;
     }
 }
