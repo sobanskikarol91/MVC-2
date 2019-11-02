@@ -4,9 +4,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public interface IBoardView { }
 
 public class BoardView : MonoBehaviour, IBoardView
 {
     
+}
+
+public interface IBoardView { }
+
+public class BoardViewFactory : IBoardViewFactory
+{
+    public IBoardView View { get; private set; }
+
+    public BoardViewFactory()
+    {
+        GameObject prefab = Resources.Load<GameObject>("View/Board");
+        GameObject instance = UnityEngine.Object.Instantiate(prefab);
+        instance.name = prefab.name;
+        View = instance.GetComponent<IBoardView>();
+    }
+}
+
+public interface IBoardViewFactory
+{
+    IBoardView View { get; }
 }
