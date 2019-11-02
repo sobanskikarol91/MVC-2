@@ -8,7 +8,29 @@ using UnityEngine.UI;
 [RequireComponent(typeof(GridLayoutGroup))]
 public class BoardView : MonoBehaviour, IBoardView
 {
-    public ISlotView[,] Slots { get; set; }
+    GridLayoutGroup gridLayout;
+
+    private ISlotView[,] slots;
+
+
+    public ISlotView[,] Slots
+    {
+        get => slots;
+        set { slots = value; UpdateGridLayout(); }
+    }
+
+    private void Awake()
+    {
+        gridLayout = GetComponent<GridLayoutGroup>();
+    }
+
+    private void UpdateGridLayout()
+    {
+        if (!gridLayout) gridLayout = GetComponent<GridLayoutGroup>();
+
+        gridLayout.constraint = GridLayoutGroup.Constraint.FixedRowCount;
+        gridLayout.constraintCount = slots.GetLength(0);
+    }
 }
 
 public interface IBoardView
