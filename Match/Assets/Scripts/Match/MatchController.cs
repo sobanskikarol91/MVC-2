@@ -1,5 +1,6 @@
 ﻿using System;
-
+using System.Linq;
+using UnityEngine;
 
 public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchController
 {
@@ -10,6 +11,13 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
     {
         SubscribingSlotsEvents(model);
         model.Swap += HandleSwap;
+        model.FoundMatchesSuccessful += HandleFoundMatches;
+    }
+
+    private void HandleFoundMatches(object sender, MatchFoundEventArgs e)
+    {
+        Vector2[] positions = e.Matches.Select(m => m.Position).ToArray();
+        view.HighlightMatches(positions);
     }
 
     private void HandleSwap(object sender, SwapEventArgs e)

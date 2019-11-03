@@ -10,6 +10,7 @@ public class MatchSearcher : MonoBehaviour
     private List<ISlotModel> matchingSlotsToErase = new List<ISlotModel>();
     private ICompareGameObjects comparison;
 
+
     public List<ISlotModel> GetMatchSequences(IBoardModel board, int sequenceLength, ICompareGameObjects comparison)
     {
         this.comparison = comparison;
@@ -32,7 +33,7 @@ public class MatchSearcher : MonoBehaviour
                 currentSlot = board.Slots[r, c];
                 CheckTileInSequence(matches);
                 previousSlot = currentSlot;
-                Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
+               // Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
             }
 
             CheckIfSequenceIsLongEnough(matches);
@@ -52,7 +53,7 @@ public class MatchSearcher : MonoBehaviour
                 currentSlot = board.Slots[r, c];
                 CheckTileInSequence(matches);
                 previousSlot = currentSlot;
-                Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
+               // Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
             }
 
             CheckIfSequenceIsLongEnough(matches);

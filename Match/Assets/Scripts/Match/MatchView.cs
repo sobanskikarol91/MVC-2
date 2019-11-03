@@ -1,4 +1,7 @@
-﻿public class MatchView : IMatchView
+﻿using UnityEngine;
+using UnityEngine.UI;
+
+public class MatchView : IMatchView
 {
     public IBoardView Board { get; }
 
@@ -6,11 +9,22 @@
     {
         Board = board;
     }
+
+    public void HighlightMatches(Vector2[] matches)
+    {
+        for (int i = 0; i < matches.Length; i++)
+        {
+            int row = (int)matches[i].x;
+            int columns = (int)matches[i].y;
+            Board.Slots[row, columns].Content.GetComponent<Image>().color = Color.black;
+        }
+    }
 }
 
 public interface IMatchView
 {
     IBoardView Board { get; }
+    void HighlightMatches(Vector2[] matches);
 }
 
 public interface IMatchViewFactory

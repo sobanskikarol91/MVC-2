@@ -7,17 +7,19 @@ using UnityEngine;
 public class MatchModel : IMatchModel
 {
     public event EventHandler<SwapEventArgs> Swap;
+    public event EventHandler<MatchFoundEventArgs> FoundMatchesSuccessful;
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
 
     private List<ISlotModel> selectedSlots = new List<ISlotModel>();
-    private MatchSearcher matchSearcher = new MatchSearcher();
+    private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
+    private MatchEraser matchEraser;
 
 
     public MatchModel(IBoardModel board, int sequenceLength)
     {
         SequenceLength = sequenceLength;
-        this.Board = board;
+        Board = board;
     }
 
     public void SelectedSlot(ISlotModel newSelected)
@@ -78,13 +80,14 @@ public class MatchModel : IMatchModel
         List<ISlotModel> matches = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
 
         Debug.Log("Matches:" + matches.Count);
+
         if (matches.Count > 0)
-            EraseMatches();
+            OnMatchesFound(matches);
     }
 
-    void EraseMatches()
+    void OnMatchesFound(List<ISlotModel> matches)
     {
-
+        FoundMatchesSuccessful?.Invoke(this, new MatchFoundEventArgs(matches));
     }
 }
 
@@ -100,11 +103,23 @@ public class SwapEventArgs : EventArgs
     public ISlotModel Slot2 { get; private set; }
 }
 
+public class MatchFoundEventArgs : EventArgs
+{
+    public List<ISlotModel> Matches { get; } = new List<ISlotModel>();
+
+    public MatchFoundEventArgs(List<ISlotModel> matches)
+    {
+        Matches = matches;
+    }
+}
+
 public interface IMatchModel
 {
+    event EventHandler<SwapEventArgs> Swap;
+    event EventHandler<MatchFoundEventArgs> FoundMatchesSuccessful;
+
     int SequenceLength { get; }
     IBoardModel Board { get; }
-    event EventHandler<SwapEventArgs> Swap;
     void SelectedSlot(ISlotModel newSelectedTile);
     void FindMatch();
 }
