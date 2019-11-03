@@ -9,15 +9,21 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
     public MatchController(IMatchModel model, IMatchView view) : base(model, view)
     {
         SubscribingSlotsEvents(model);
+        model.Swap += HandleSwap;
+    }
+
+    private void HandleSwap(object sender, SwapEventArgs e)
+    {
+        model.FindMatch();
     }
 
     private void SubscribingSlotsEvents(IMatchModel model)
     {
-        ISlotModel[,] slots = model.board.Slots;
+        ISlotModel[,] slots = model.Board.Slots;
 
-        for (int r = 0; r < model.board.Rows; r++)
+        for (int r = 0; r < model.Board.Rows; r++)
         {
-            for (int c = 0; c < model.board.Columns; c++)
+            for (int c = 0; c < model.Board.Columns; c++)
             {
                 slots[r, c].Clicked += HandleClickedSlot;
             }

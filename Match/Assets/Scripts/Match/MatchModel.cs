@@ -7,13 +7,17 @@ using UnityEngine;
 public class MatchModel : IMatchModel
 {
     public event EventHandler<SwapEventArgs> Swap;
-    public IBoardModel board { get; }
+    public IBoardModel Board { get; }
+    public int SequenceLength { get; }
 
     private List<ISlotModel> selectedSlots = new List<ISlotModel>();
+    private MatchSearcher matchSearcher = new MatchSearcher();
 
-    public MatchModel(IBoardModel board)
+
+    public MatchModel(IBoardModel board, int sequenceLength)
     {
-        this.board = board;
+        SequenceLength = sequenceLength;
+        this.Board = board;
     }
 
     public void SelectedSlot(ISlotModel newSelected)
@@ -68,6 +72,20 @@ public class MatchModel : IMatchModel
 
         Swap?.Invoke(this, new SwapEventArgs(selectedSlots.First(), selectedSlots.Last()));
     }
+
+    public void FindMatch()
+    {
+        List<ISlotModel> matches = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
+
+        Debug.Log("Matches:" + matches.Count);
+        if (matches.Count > 0)
+            EraseMatches();
+    }
+
+    void EraseMatches()
+    {
+
+    }
 }
 
 public class SwapEventArgs : EventArgs
@@ -84,6 +102,9 @@ public class SwapEventArgs : EventArgs
 
 public interface IMatchModel
 {
-    IBoardModel board { get; }
+    int SequenceLength { get; }
+    IBoardModel Board { get; }
+    event EventHandler<SwapEventArgs> Swap;
     void SelectedSlot(ISlotModel newSelectedTile);
+    void FindMatch();
 }

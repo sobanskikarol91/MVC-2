@@ -25,7 +25,7 @@ public class ApplicationController : MonoBehaviour
 
     private void CreateMatch()
     {
-        IMatchModel model = new MatchModel(boardModel);
+        IMatchModel model = new MatchModel(boardModel, settings.MatchSequenceLength);
         IMatchView view = new MatchView(boardView);
         IMatchController controller = new MatchController(model, view);
     }

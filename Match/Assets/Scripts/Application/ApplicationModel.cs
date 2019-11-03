@@ -8,7 +8,7 @@ public class ApplicationModel : ScriptableObject
     public int Rows { get => height; }
     public int Columns { get => width; }
     public Color[] TileColors { get => tileColors; }
-    public int MinMatchesAmount { get => minMatchesAmount; }
+    public int MatchSequenceLength { get => matchSequenceLength; }
     public GameObject TilePrefab { get => tilePrefab; }
 
     // TODO: Create custom inspector for this parametr
@@ -17,6 +17,6 @@ public class ApplicationModel : ScriptableObject
     [SerializeField] int height;
     [SerializeField] int width;
     [SerializeField] Color[] tileColors;
-    [SerializeField] int minMatchesAmount = 3;
+    [SerializeField] int matchSequenceLength = 3;
     [SerializeField] GameObject tilePrefab;
 }

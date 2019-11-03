@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class MatchSearcher : MonoBehaviour
 {
     private ISlotModel previousSlot, currentSlot;
     private int sequenceLength = 3;
     private List<ISlotModel> matchingSlotsToErase = new List<ISlotModel>();
+    private ICompareGameObjects comparison;
 
-
-    public List<ISlotModel> GetMatchSequences(IBoardModel board, int sequenceLength)
+    public List<ISlotModel> GetMatchSequences(IBoardModel board, int sequenceLength, ICompareGameObjects comparison)
     {
+        this.comparison = comparison;
         this.sequenceLength = sequenceLength;
         SearchRows(board);
         SearchColumns(board);
@@ -30,7 +32,7 @@ public class MatchSearcher : MonoBehaviour
                 currentSlot = board.Slots[r, c];
                 CheckTileInSequence(matches);
                 previousSlot = currentSlot;
-                //Debug.Log(Slots[index].Position + "Matching Amount:" + matches.Count);
+                Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
             }
 
             CheckIfSequenceIsLongEnough(matches);
@@ -47,10 +49,10 @@ public class MatchSearcher : MonoBehaviour
         {
             for (int r = 0; r < board.Rows; r++)
             {
-                currentSlot = board.Slots[c, r];
+                currentSlot = board.Slots[r, c];
                 CheckTileInSequence(matches);
                 previousSlot = currentSlot;
-                //Debug.Log(Slots[index].Position + "Matching Amount:" + matches.Count);
+                Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
             }
 
             CheckIfSequenceIsLongEnough(matches);
@@ -87,10 +89,26 @@ public class MatchSearcher : MonoBehaviour
 
     private bool IsTheSameAsPreviousSlot()
     {
-        //Debug.Log(currentSlot.Content.Color + " " + previousSlot.Content.Color);
-
         // po losowaniu mozna wywalic nulla
         if (currentSlot.Content == null || previousSlot.Content == null) return false;
-        return currentSlot.Content == previousSlot.Content;
+
+        List<GameObject> toCompare = new List<GameObject> { currentSlot.Content, previousSlot.Content };
+        return comparison.AreEqual(toCompare);
+    }
+}
+
+public interface ICompareGameObjects
+{
+    bool AreEqual(List<GameObject> gameObjects);
+}
+
+public class MatchColorComparation : ICompareGameObjects
+{
+    public bool AreEqual(List<GameObject> gameObjects)
+    {
+        if (gameObjects.Count <= 1) return false;
+
+        Color color = gameObjects.First().GetComponent<Image>().color;
+        return gameObjects.TrueForAll(g => g.GetComponent<Image>().color == color);
     }
 }
