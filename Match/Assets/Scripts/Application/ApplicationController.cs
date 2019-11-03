@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ApplicationController : MonoBehaviour
@@ -8,6 +9,10 @@ public class ApplicationController : MonoBehaviour
     private int rows;
     private int columns;
 
+    IBoardModel boardModel;
+    IBoardView boardView;
+    IBoardController boardController;
+
 
     private void Awake()
     {
@@ -15,6 +20,14 @@ public class ApplicationController : MonoBehaviour
         columns = settings.Columns;
         GameObject[,] slotContent = GetRandomGameObjects();
         CreateBoard(slotContent);
+        CreateMatch();
+    }
+
+    private void CreateMatch()
+    {
+        IMatchModel model = new MatchModel(boardModel);
+        IMatchView view = new MatchView(boardView);
+        IMatchController controller = new MatchController(model, view);
     }
 
     GameObject[,] GetRandomGameObjects()
@@ -40,14 +53,14 @@ public class ApplicationController : MonoBehaviour
     void CreateBoard(GameObject[,] slotContent)
     {
         BoardModelFactory modelFactory = new BoardModelFactory();
-        IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
+        boardModel = modelFactory.Create(new SlotModelFactory(), rows, columns);
 
         BoardViewFactory viewFactory = new BoardViewFactory();
-        IBoardView view = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);
+        boardView = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);
 
         BoardControllerFactory controllerFactory = new BoardControllerFactory();
-        IBoardController controller = controllerFactory.Create(new SlotControllerFactory(), model, view);
+        boardController = controllerFactory.Create(new SlotControllerFactory(), boardModel, boardView);
 
-        model.SetSlotsContent(slotContent);
+        boardModel.SetSlotsContent(slotContent);
     }
 }

@@ -33,8 +33,7 @@ public class SlotView : MonoBehaviour, ISlotView
 
     private void OnButtonClicked()
     {
-        var e = new OnSlotClickedEventArgs();
-        Clicked?.Invoke(this, e);
+        Clicked?.Invoke(this, new OnSlotClickedEventArgs());
     }
 
     public void Select()
