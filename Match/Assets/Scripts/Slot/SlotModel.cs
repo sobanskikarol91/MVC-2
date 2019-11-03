@@ -15,10 +15,9 @@ public class SlotModel : ISlotModel
         get => content;
         set
         {
-
             if (content == value) return;
+
             content = value;
-            Debug.Log("Set model content");
             ContentChanged?.Invoke(this, new ContentChangedEventArgs(content));
         }
     }

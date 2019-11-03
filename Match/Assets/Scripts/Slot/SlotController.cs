@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
+
 public class SlotController : ControllerMVC<ISlotModel, ISlotView>, ISlotController
 {
     public SlotController(ISlotModel model, ISlotView view) : base(model, view)

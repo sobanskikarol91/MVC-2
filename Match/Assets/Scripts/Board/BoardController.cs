@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
-
-
-public class BoardController : ControllerMVC<IBoardModel, IBoardView>, IBoardController
+﻿public class BoardController : ControllerMVC<IBoardModel, IBoardView>, IBoardController
 {
     ISlotController[,] Slots;
 
