@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class ApplicationController : MonoBehaviour
 {
@@ -16,20 +13,35 @@ public class ApplicationController : MonoBehaviour
     {
         rows = settings.Rows;
         columns = settings.Columns;
-        CreateBoard();
-        GenerateRandomTiles();
+        GameObject[,] slotContent = GetRandomGameObjects();
+        CreateBoard(slotContent);
     }
 
-    private void GenerateRandomTiles()
+    GameObject[,] GetRandomGameObjects()
     {
         Color[,] colors = new Color[rows, columns];
         SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.ColorsAmount, settings.Seed);
+
+        GameObject TilePrefab = settings.TilePrefab;
+        GameObject[,] tiles = new GameObject[rows, columns];
+
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                tiles[r, c] = Instantiate(settings.TilePrefab);
+                TilePrefab.GetComponent<Image>().color = colors[r, c];
+            }
+        }
+
+        return tiles;
     }
 
-    void CreateBoard()
+    void CreateBoard(GameObject[,] slotContent)
     {
         BoardModelFactory modelFactory = new BoardModelFactory();
         IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
+        model.SetSlotsContent(slotContent);
 
         BoardViewFactory viewFactory = new BoardViewFactory();
         IBoardView view = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);

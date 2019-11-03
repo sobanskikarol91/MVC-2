@@ -24,3 +24,5 @@ MonoBehaviour:
   - {r: 1, g: 0, b: 0.9965396, a: 1}
   - {r: 0, g: 0.3165152, b: 1, a: 1}
   minMatchesAmount: 3
+  tilePrefab: {fileID: 912659358591438178, guid: 1ea7fdfbf56452942878d08db62e0642,
+    type: 3}

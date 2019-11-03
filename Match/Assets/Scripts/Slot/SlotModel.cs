@@ -7,7 +7,7 @@ public class SlotModel : ISlotModel
     public event EventHandler Selected;
     public event EventHandler Deselected;
     public Vector2 Position { get; }
-    public GameObject Content { get; }
+    public GameObject Content { get; set; }
 
     private bool isSelected;
     public bool IsSelected
@@ -35,6 +35,7 @@ public interface ISlotModel
 {
     event EventHandler Selected;
     event EventHandler Deselected;
+    GameObject Content { get; set; }
     Vector2 Position { get; }
     bool IsSelected { get; set; }
 }

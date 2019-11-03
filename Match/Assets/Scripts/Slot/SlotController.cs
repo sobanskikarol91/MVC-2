@@ -26,10 +26,7 @@ public class SlotController : ControllerMVC<ISlotModel, ISlotView>, ISlotControl
     }
 }
 
-public interface ISlotController
-{
-
-}
+public interface ISlotController { }
 
 public interface ISlotControllerFactory
 {
