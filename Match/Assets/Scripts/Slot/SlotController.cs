@@ -1,16 +1,35 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
 
 
 public class SlotController : ControllerMVC<ISlotModel, ISlotView>, ISlotController
 {
-    public SlotController(ISlotModel model, ISlotView view) : base(model, view) { }
+    public SlotController(ISlotModel model, ISlotView view) : base(model, view)
+    {
+        view.Clicked += HandleSlotClicked;
+        model.Selected += HandleSelectedSlot;
+        model.Deselected += HandleDeselectedSlot;
+    }
+
+    private void HandleSlotClicked(object sender, OnSlotClickedEventArgs e)
+    {
+        model.IsSelected = true;
+    }
+
+    private void HandleSelectedSlot(object sender, EventArgs e)
+    {
+        view.Select();
+    }
+
+    private void HandleDeselectedSlot(object sender, EventArgs e)
+    {
+        view.Deselect();
+    }
 }
 
-public interface ISlotController { }
+public interface ISlotController
+{
+
+}
 
 public interface ISlotControllerFactory
 {

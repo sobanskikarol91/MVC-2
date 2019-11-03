@@ -1,26 +1,42 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.Linq;
 
 
 public class SlotModel : ISlotModel
 {
+    public event EventHandler Selected;
+    public event EventHandler Deselected;
     public Vector2 Position { get; }
-    public ITileModel Tile { get; }
+    public GameObject Content { get; }
 
+    private bool isSelected;
+    public bool IsSelected
+    {
+        get => isSelected;
+        set
+        {
+            isSelected = value;
 
-    public SlotModel(Vector2 position, ITileModel tile = null)
+            if (isSelected)
+                Selected.Invoke(this, EventArgs.Empty);
+            else
+                Deselected.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public SlotModel(Vector2 position, GameObject content = null)
     {
         Position = position;
-        Tile = tile;
+        Content = content;
     }
 }
 
 public interface ISlotModel
 {
+    event EventHandler Selected;
+    event EventHandler Deselected;
     Vector2 Position { get; }
+    bool IsSelected { get; set; }
 }
 
 public class SlotModelFactory : ISlotModelFactory

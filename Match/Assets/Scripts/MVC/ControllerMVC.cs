@@ -1,7 +1,7 @@
 ﻿public class ControllerMVC<M, V>
 {
-    private readonly M model;
-    private readonly V view;
+    protected readonly M model;
+    protected readonly V view;
 
     public ControllerMVC(M model, V view)
     {
