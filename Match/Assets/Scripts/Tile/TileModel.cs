@@ -4,9 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public interface ITileModel { }
-
 public class TileModel : ITileModel 
 {
+    public Color color { get; set; }
 
+    public TileModel(Color color)
+    {
+        this.color = color;
+    }
 }
+
+public interface ITileModel { }

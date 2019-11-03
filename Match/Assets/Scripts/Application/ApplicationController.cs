@@ -8,22 +8,28 @@ public class ApplicationController : MonoBehaviour
 {
     [SerializeField] ApplicationModel settings;
 
+    private int rows;
+    private int columns;
     private void Awake()
     {
+        rows = settings.Rows;
+        columns = settings.Columns;
         CreateBoard();
         GenerateRandomTiles();
     }
 
     private void GenerateRandomTiles()
     {
-        //TileModel[,] = SeedGenerator.SetRandomNotRepeatingCollection(); 
+
+        Color[,] colors = new Color[rows, columns];
+        SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.ColorsAmount, settings.Seed);
+
     }
 
     void CreateBoard()
     {
-        int rows = settings.Rows;
-        int columns = settings.Columns;
-        
+
+
         BoardModelFactory modelFactory = new BoardModelFactory();
         IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
 

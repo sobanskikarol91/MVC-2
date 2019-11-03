@@ -1,12 +1,15 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using System.Linq;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public interface ITileView { }
 
-public class TileView : MonoBehaviour, ITileView 
+[RequireComponent(typeof(Image))]
+public class TileView : MonoBehaviour, ITileView
 {
+    private Image image;
 
+    private void Awake()
+    {
+        image = GetComponent<Image>();
+    }
 }
