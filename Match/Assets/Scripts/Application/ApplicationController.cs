@@ -30,7 +30,7 @@ public class ApplicationController : MonoBehaviour
             for (int c = 0; c < columns; c++)
             {
                 tiles[r, c] = Instantiate(settings.TilePrefab);
-                TilePrefab.GetComponent<Image>().color = colors[r, c];
+                tiles[r, c].GetComponent<Image>().color = colors[r, c];
             }
         }
 
