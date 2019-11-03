@@ -41,12 +41,13 @@ public class ApplicationController : MonoBehaviour
     {
         BoardModelFactory modelFactory = new BoardModelFactory();
         IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
-        model.SetSlotsContent(slotContent);
 
         BoardViewFactory viewFactory = new BoardViewFactory();
         IBoardView view = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);
 
         BoardControllerFactory controllerFactory = new BoardControllerFactory();
         IBoardController controller = controllerFactory.Create(new SlotControllerFactory(), model, view);
+
+        model.SetSlotsContent(slotContent);
     }
 }

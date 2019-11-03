@@ -62,6 +62,7 @@ public class OnSlotClickedEventArgs : EventArgs { }
 public interface ISlotView
 {
     event EventHandler<OnSlotClickedEventArgs> Clicked;
+    GameObject Content { get; set; }
     void Select();
     void Deselect();
     void DisableInteraction();

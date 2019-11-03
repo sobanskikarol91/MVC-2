@@ -6,8 +6,22 @@ public class SlotModel : ISlotModel
 {
     public event EventHandler Selected;
     public event EventHandler Deselected;
+    public event EventHandler<ContentChangedEventArgs> ContentChanged;
     public Vector2 Position { get; }
-    public GameObject Content { get; set; }
+
+    private GameObject content;
+    public GameObject Content
+    {
+        get => content;
+        set
+        {
+
+            if (content == value) return;
+            content = value;
+            Debug.Log("Set model content");
+            ContentChanged?.Invoke(this, new ContentChangedEventArgs(content));
+        }
+    }
 
     private bool isSelected;
     public bool IsSelected
@@ -31,10 +45,21 @@ public class SlotModel : ISlotModel
     }
 }
 
+public class ContentChangedEventArgs : EventArgs
+{
+    public GameObject Content { get; }
+
+    public ContentChangedEventArgs(GameObject content)
+    {
+        Content = content;
+    }
+}
+
 public interface ISlotModel
 {
     event EventHandler Selected;
     event EventHandler Deselected;
+    event EventHandler<ContentChangedEventArgs> ContentChanged;
     GameObject Content { get; set; }
     Vector2 Position { get; }
     bool IsSelected { get; set; }
