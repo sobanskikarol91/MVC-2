@@ -15,7 +15,6 @@ public class MatchModel : IMatchModel
 
     private List<ISlotModel> selectedSlots = new List<ISlotModel>();
     private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
-    private MatchEraser matchEraser;
     private List<ISlotModel> foundedMatches = new List<ISlotModel>();
 
 
@@ -75,7 +74,7 @@ public class MatchModel : IMatchModel
 
     public void FindMatch()
     {
-        foundedMatches  = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
+        foundedMatches = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
 
         Debug.Log("Matches:" + foundedMatches.Count);
 
@@ -83,7 +82,7 @@ public class MatchModel : IMatchModel
             OnMatchesFound();
     }
 
-    void OnMatchesFound()
+    private void OnMatchesFound()
     {
         FoundMatchesSuccessful?.Invoke(this, new MatchesEventArgs(foundedMatches));
     }
@@ -126,6 +125,8 @@ public interface IMatchModel
 
     int SequenceLength { get; }
     IBoardModel Board { get; }
+
     void SelectedSlot(ISlotModel newSelectedTile);
+    void OnErasingMatches();
     void FindMatch();
 }

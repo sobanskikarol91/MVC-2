@@ -46,7 +46,6 @@ public class SlotModel : ISlotModel
 
     private void OnDeselected()
     {
-        Debug.Log("OnDeselct");
         Deselected.Invoke(this, EventArgs.Empty);
     }
 
