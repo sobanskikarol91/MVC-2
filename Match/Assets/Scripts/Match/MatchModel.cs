@@ -7,13 +7,16 @@ using UnityEngine;
 public class MatchModel : IMatchModel
 {
     public event EventHandler<SwapEventArgs> Swap;
-    public event EventHandler<MatchFoundEventArgs> FoundMatchesSuccessful;
+    public event EventHandler<MatchesEventArgs> FoundMatchesSuccessful;
+    public event EventHandler<MatchesEventArgs> ErasingMatches;
+
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
 
     private List<ISlotModel> selectedSlots = new List<ISlotModel>();
     private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
     private MatchEraser matchEraser;
+    private List<ISlotModel> foundedMatches = new List<ISlotModel>();
 
 
     public MatchModel(IBoardModel board, int sequenceLength)
@@ -24,8 +27,6 @@ public class MatchModel : IMatchModel
 
     public void SelectedSlot(ISlotModel newSelected)
     {
-        Debug.Log("choose state");
-
         if (IsntAnySlotSelected())
             SelectFirstTile(newSelected);
         else if (IsSelectedTheSameTile(newSelected))
@@ -41,15 +42,12 @@ public class MatchModel : IMatchModel
 
     private void SelectFirstTile(ISlotModel newSelectedSlot)
     {
-        Debug.Log("Selected");
         selectedSlots.Add(newSelectedSlot);
     }
 
     private void SelectSecondTile(ISlotModel newSelectedSlot)
     {
-        Debug.Log("Swap");
         selectedSlots.Add(newSelectedSlot);
-
         OnSwap();
         DeselectSlots();
     }
@@ -77,17 +75,24 @@ public class MatchModel : IMatchModel
 
     public void FindMatch()
     {
-        List<ISlotModel> matches = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
+        foundedMatches  = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
 
-        Debug.Log("Matches:" + matches.Count);
+        Debug.Log("Matches:" + foundedMatches.Count);
 
-        if (matches.Count > 0)
-            OnMatchesFound(matches);
+        if (foundedMatches.Count > 0)
+            OnMatchesFound();
     }
 
-    void OnMatchesFound(List<ISlotModel> matches)
+    void OnMatchesFound()
     {
-        FoundMatchesSuccessful?.Invoke(this, new MatchFoundEventArgs(matches));
+        FoundMatchesSuccessful?.Invoke(this, new MatchesEventArgs(foundedMatches));
+    }
+
+    // Create new class for this content
+    public void OnErasingMatches()
+    {
+        foundedMatches.Select(c => c.Content = null);
+        ErasingMatches?.Invoke(this, new MatchesEventArgs(foundedMatches));
     }
 }
 
@@ -103,11 +108,11 @@ public class SwapEventArgs : EventArgs
     public ISlotModel Slot2 { get; private set; }
 }
 
-public class MatchFoundEventArgs : EventArgs
+public class MatchesEventArgs : EventArgs
 {
     public List<ISlotModel> Matches { get; } = new List<ISlotModel>();
 
-    public MatchFoundEventArgs(List<ISlotModel> matches)
+    public MatchesEventArgs(List<ISlotModel> matches)
     {
         Matches = matches;
     }
@@ -116,7 +121,8 @@ public class MatchFoundEventArgs : EventArgs
 public interface IMatchModel
 {
     event EventHandler<SwapEventArgs> Swap;
-    event EventHandler<MatchFoundEventArgs> FoundMatchesSuccessful;
+    event EventHandler<MatchesEventArgs> FoundMatchesSuccessful;
+    event EventHandler<MatchesEventArgs> ErasingMatches;
 
     int SequenceLength { get; }
     IBoardModel Board { get; }

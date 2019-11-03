@@ -12,9 +12,16 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         SubscribingSlotsEvents(model);
         model.Swap += HandleSwap;
         model.FoundMatchesSuccessful += HandleFoundMatches;
+        model.ErasingMatches += HandleEraseMatches;
     }
 
-    private void HandleFoundMatches(object sender, MatchFoundEventArgs e)
+    private void HandleEraseMatches(object sender, MatchesEventArgs e)
+    {
+        Vector2[] positions = e.Matches.Select(m => m.Position).ToArray();
+        view.EraseMatches(positions);
+    }
+
+    private void HandleFoundMatches(object sender, MatchesEventArgs e)
     {
         Vector2[] positions = e.Matches.Select(m => m.Position).ToArray();
         view.HighlightMatches(positions);

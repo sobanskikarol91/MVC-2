@@ -17,7 +17,7 @@ public class MatchSearcher : MonoBehaviour
         this.sequenceLength = sequenceLength;
         SearchRows(board);
         SearchColumns(board);
-
+        matchingSlotsToErase = matchingSlotsToErase.Distinct().ToList();
         return matchingSlotsToErase;
     }
 

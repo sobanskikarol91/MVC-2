@@ -52,7 +52,6 @@ public class SlotModel : ISlotModel
 
     private void OnSelected()
     {
-        Debug.Log("OnSelect");
         Selected.Invoke(this, EventArgs.Empty);
     }
 
