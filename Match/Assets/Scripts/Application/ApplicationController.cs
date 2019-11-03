@@ -10,6 +10,8 @@ public class ApplicationController : MonoBehaviour
 
     private int rows;
     private int columns;
+
+
     private void Awake()
     {
         rows = settings.Rows;
@@ -20,16 +22,12 @@ public class ApplicationController : MonoBehaviour
 
     private void GenerateRandomTiles()
     {
-
         Color[,] colors = new Color[rows, columns];
         SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.ColorsAmount, settings.Seed);
-
     }
 
     void CreateBoard()
     {
-
-
         BoardModelFactory modelFactory = new BoardModelFactory();
         IBoardModel model = modelFactory.Create(new SlotModelFactory(), rows, columns);
 

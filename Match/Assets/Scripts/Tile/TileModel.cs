@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 
-public class TileModel : ITileModel 
+public class TileModel : ITileModel
 {
     public Color color { get; set; }
 
@@ -15,3 +15,13 @@ public class TileModel : ITileModel
 }
 
 public interface ITileModel { }
+
+public interface ITileModelFactory
+{
+    ITileModel Create();
+}
+
+public class TileModelFactory
+{
+
+}

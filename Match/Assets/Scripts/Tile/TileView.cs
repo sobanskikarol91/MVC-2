@@ -6,10 +6,10 @@ public interface ITileView { }
 [RequireComponent(typeof(Image))]
 public class TileView : MonoBehaviour, ITileView
 {
-    private Image image;
+    public Image Image { get; set; }
 
     private void Awake()
     {
-        image = GetComponent<Image>();
+        Image = GetComponent<Image>();
     }
 }
