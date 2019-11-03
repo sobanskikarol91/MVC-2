@@ -8,10 +8,10 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
 
     public MatchController(IMatchModel model, IMatchView view) : base(model, view)
     {
-        SubscribingSelectedSlots(model);
+        SubscribingSlotsEvents(model);
     }
 
-    private void SubscribingSelectedSlots(IMatchModel model)
+    private void SubscribingSlotsEvents(IMatchModel model)
     {
         ISlotModel[,] slots = model.board.Slots;
 
@@ -19,12 +19,12 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         {
             for (int c = 0; c < model.board.Columns; c++)
             {
-                slots[r, c].Selected += HandleSelectedSlot;
+                slots[r, c].Clicked += HandleClockedSlot;
             }
         }
     }
 
-    private void HandleSelectedSlot(object sender, EventArgs e)
+    private void HandleClockedSlot(object sender, EventArgs e)
     {
         ISlotModel slot = sender as ISlotModel;
         model.SelectedSlot(slot);

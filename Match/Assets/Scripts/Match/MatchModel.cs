@@ -6,64 +6,67 @@ using UnityEngine;
 
 public class MatchModel : IMatchModel
 {
-    public event EventHandler<SwapEventArgs> Swapping;
+    public event EventHandler<SwapEventArgs> Swap;
 
     public IBoardModel board { get; }
-    private ISlotModel firstSelectedSlot;
-    private ISlotModel secondSelectedSlot;
+    List<ISlotModel> selectedSlots = new List<ISlotModel>();
 
     public MatchModel(IBoardModel board)
     {
         this.board = board;
     }
 
-    public void SelectedSlot(ISlotModel newSelectedTile)
+    public void SelectedSlot(ISlotModel newSelected)
     {
-        if (firstSelectedSlot == null)
-            SelectFirstTile(newSelectedTile);
-        else if (IsSelectedTheSameTile(newSelectedTile))
-            DeselectTile(ref firstSelectedSlot);
+        Debug.Log("choose state");
+
+        if (IsntAnySlotSelected())
+            SelectFirstTile(newSelected);
+        else if (IsSelectedTheSameTile(newSelected))
+            DeselectSlots();
         else
-            SelectSecondTile(newSelectedTile);
+            SelectSecondTile(newSelected);
     }
 
-    private void SelectFirstTile(ISlotModel newSelectedTile)
+    private bool IsntAnySlotSelected()
     {
-        firstSelectedSlot = newSelectedTile;
+        return selectedSlots.Count == 0;
     }
 
-    private void DeselectBothTiles()
+    private void SelectFirstTile(ISlotModel newSelectedSlot)
     {
-        DeselectTile(ref firstSelectedSlot);
-        DeselectTile(ref secondSelectedSlot);
+        Debug.Log("Selected");
+        selectedSlots.Add(newSelectedSlot);
     }
 
-    private void DeselectTile(ref ISlotModel selectedTile)
+    private void SelectSecondTile(ISlotModel newSelectedSlot)
     {
-        selectedTile.IsSelected = false;
-        selectedTile = null;
-    }
-
-    private void SelectSecondTile(ISlotModel newSelectedTile)
-    {
-        secondSelectedSlot = newSelectedTile;
+        Debug.Log("Swap");
+        selectedSlots.Add(newSelectedSlot);
 
         OnSwap();
-        DeselectBothTiles();
+        DeselectSlots();
+    }
+
+    private void DeselectSlots()
+    {
+        selectedSlots.ForEach(s => s.Deselect());
+        selectedSlots.Clear();
     }
 
     private bool IsSelectedTheSameTile(ISlotModel newSelectedTile)
     {
-        return newSelectedTile.Position == firstSelectedSlot.Position;
+        return selectedSlots?.First() == newSelectedTile;
     }
 
     private void OnSwap()
     {
-        GameObject content1 = firstSelectedSlot.Content;
-        firstSelectedSlot.Content = secondSelectedSlot.Content;
-        secondSelectedSlot.Content = content1;
+        GameObject firstContent = selectedSlots.First().Content;
 
-        Swapping?.Invoke(this, new SwapEventArgs(firstSelectedSlot, secondSelectedSlot));
+        selectedSlots.First().Content = selectedSlots.Last().Content;
+        selectedSlots.Last().Content = firstContent;
+
+        Swap?.Invoke(this, new SwapEventArgs(selectedSlots.First(), selectedSlots.Last()));
     }
 }
 
