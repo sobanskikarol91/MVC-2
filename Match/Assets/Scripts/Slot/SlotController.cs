@@ -12,7 +12,7 @@ public class SlotController : ControllerMVC<ISlotModel, ISlotView>, ISlotControl
 
     private void HandleSlotClicked(object sender, OnSlotClickedEventArgs e)
     {
-        model.IsSelected = true;
+        model.IsSelected ^= true;
     }
 
     private void HandleSelectedSlot(object sender, EventArgs e)
