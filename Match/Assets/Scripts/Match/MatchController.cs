@@ -19,12 +19,12 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         {
             for (int c = 0; c < model.board.Columns; c++)
             {
-                slots[r, c].Clicked += HandleCloickedSlot;
+                slots[r, c].Clicked += HandleClickedSlot;
             }
         }
     }
 
-    private void HandleCloickedSlot(object sender, EventArgs e)
+    private void HandleClickedSlot(object sender, EventArgs e)
     {
         ISlotModel slot = sender as ISlotModel;
         model.SelectedSlot(slot);

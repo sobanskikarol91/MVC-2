@@ -7,9 +7,9 @@ using UnityEngine;
 public class MatchModel : IMatchModel
 {
     public event EventHandler<SwapEventArgs> Swap;
-
     public IBoardModel board { get; }
-    List<ISlotModel> selectedSlots = new List<ISlotModel>();
+
+    private List<ISlotModel> selectedSlots = new List<ISlotModel>();
 
     public MatchModel(IBoardModel board)
     {
