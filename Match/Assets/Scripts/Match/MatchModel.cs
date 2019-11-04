@@ -6,75 +6,27 @@ using UnityEngine;
 
 public class MatchModel : IMatchModel
 {
-    public event EventHandler<SwapEventArgs> Swap;
     public event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
     public event EventHandler<EraseContentEventArgs> ErasingMatches;
 
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
     public GameObject[] SlotContentVariants { get; }
+    public MatchInteraction Interaction { get; }
 
-    private List<ISlotModel> selectedSlots = new List<ISlotModel>();
     private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
     private MatchTileShifter tileShifter;                          // TODO: Create interfaces for it.
+
     private List<ISlotModel> foundedMatches = new List<ISlotModel>();
-
-
 
     public MatchModel(IBoardModel board, int sequenceLength, GameObject[] slotContentVariants)
     {
         SlotContentVariants = slotContentVariants;
         SequenceLength = sequenceLength;
         Board = board;
+
         tileShifter = new MatchTileShifter(Board.Slots);
-    }
-
-    public void SelectedSlot(ISlotModel newSelected)
-    {
-        if (IsntAnySlotSelected())
-            SelectFirstTile(newSelected);
-        else if (IsSelectedTheSameTile(newSelected))
-            DeselectSlots();
-        else
-            SelectSecondTile(newSelected);
-    }
-
-    private bool IsntAnySlotSelected()
-    {
-        return selectedSlots.Count == 0;
-    }
-
-    private void SelectFirstTile(ISlotModel newSelectedSlot)
-    {
-        selectedSlots.Add(newSelectedSlot);
-    }
-
-    private void SelectSecondTile(ISlotModel newSelectedSlot)
-    {
-        selectedSlots.Add(newSelectedSlot);
-        OnSwap();
-        DeselectSlots();
-    }
-
-    private void DeselectSlots()
-    {
-        selectedSlots.ForEach(s => s.Deselect());
-        selectedSlots.Clear();
-    }
-
-    private bool IsSelectedTheSameTile(ISlotModel newSelectedTile)
-    {
-        return selectedSlots?.First() == newSelectedTile;
-    }
-
-    private void OnSwap()
-    {
-        GameObject firstContent = selectedSlots.First().Content;
-
-        selectedSlots.First().Content = selectedSlots.Last().Content;
-        selectedSlots.Last().Content = firstContent;
-
-        Swap?.Invoke(this, new SwapEventArgs(selectedSlots.First(), selectedSlots.Last()));
+        Interaction = new MatchInteraction();
     }
 
     public void FindMatch()
@@ -90,7 +42,6 @@ public class MatchModel : IMatchModel
         FoundMatchesSuccessful?.Invoke(this, new FoundMatchesEventArgs(foundedMatches));
     }
 
-    // Create new class for this content
     public void OnErasingMatches()
     {
         GameObject[] contentToErase = foundedMatches.Select(f => f.Content).ToArray();
@@ -170,15 +121,14 @@ public class SwapEventArgs : EventArgs
 
 public interface IMatchModel
 {
-    event EventHandler<SwapEventArgs> Swap;
     event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
     event EventHandler<EraseContentEventArgs> ErasingMatches;
 
+    MatchInteraction Interaction { get; }
     int SequenceLength { get; }
     IBoardModel Board { get; }
     GameObject[] SlotContentVariants { get; }
 
-    void SelectedSlot(ISlotModel newSelectedTile);
     void OnErasingMatches();
     void FindMatch();
     void ShiftTiles();

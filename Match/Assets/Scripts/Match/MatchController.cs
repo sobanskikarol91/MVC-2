@@ -9,7 +9,7 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
     public MatchController(IMatchModel model, IMatchView view) : base(model, view)
     {
         SubscribingSlotsEvents(model);
-        model.Swap += HandleSwap;
+        model.Interaction.Swap += HandleSwap;
         model.FoundMatchesSuccessful += HandleFoundMatches;
         model.ErasingMatches += HandleEraseMatches;
 
@@ -48,7 +48,7 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
     private void HandleClickedSlot(object sender, EventArgs e)
     {
         ISlotModel slot = sender as ISlotModel;
-        model.SelectedSlot(slot);
+        model.Interaction.SelectedSlot(slot);
     }
 }
 
