@@ -81,8 +81,6 @@ public class MatchModel : IMatchModel
     {
         foundedMatches = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
 
-        Debug.Log("Matches:" + foundedMatches.Count + foundedMatches[0].Position);
-
         if (foundedMatches.Count > 0)
             OnMatchesFound();
     }
@@ -104,6 +102,7 @@ public class MatchModel : IMatchModel
     {
         tileShifter.ShiftDownTiles();
         FillEmptyTiles();
+        //FindMatch();
     }
 
     ISlotModel[] GetEmptySlots()
