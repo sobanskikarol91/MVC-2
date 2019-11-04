@@ -2,7 +2,7 @@
 
 
 [CreateAssetMenu(fileName = "ApplicationModel", menuName = "Game/Application/Model")]
-public class ApplicationModel : ScriptableObject
+public class ApplicationSettings : ScriptableObject
 {
     public int ColorsAmount { get => tileColors.Length; }
     public int Seed { get => seed; }

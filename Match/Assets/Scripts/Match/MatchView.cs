@@ -16,6 +16,7 @@ public class MatchView : MonoBehaviour, IMatchView
     private float animationTime = 0.4f;
     private float fillingTime = 1f;
 
+
     public void Init(IBoardView board)
     {
         Board = board;
@@ -40,7 +41,6 @@ public class MatchView : MonoBehaviour, IMatchView
         for (int i = 0; i < matches.Length; i++)
             matches[i].SetActive(false);
 
-        // TODO: Fade animation (Corutine)
         ErasedMatchesEnd?.Invoke();
     }
 
@@ -86,6 +86,7 @@ public interface IMatchView
     event Action FillingEmptySlotesEnd;
 
     IBoardView Board { get; }
+
     void Init(IBoardView board);
     void HighlightMatches(Vector2[] matches);
     void EraseMatches(GameObject[] matches);

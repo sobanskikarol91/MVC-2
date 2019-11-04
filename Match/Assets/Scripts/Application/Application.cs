@@ -2,16 +2,16 @@
 using UnityEngine.UI;
 
 
-public class ApplicationController : MonoBehaviour
+public class Application : MonoBehaviour
 {
-    [SerializeField] ApplicationModel settings;
+    [SerializeField] ApplicationSettings settings;
 
     private int rows;
     private int columns;
 
-    IBoardModel boardModel;
-    IBoardView boardView;
-    IBoardController boardController;
+    private IBoardModel boardModel;
+    private IBoardView boardView;
+    private IBoardController boardController;
 
 
     private void Awake()
