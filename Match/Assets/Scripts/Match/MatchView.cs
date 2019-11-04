@@ -27,6 +27,7 @@ public class MatchView : IMatchView
         for (int i = 0; i < matches.Length; i++)
             matches[i].SetActive(false);
 
+
         // TODO: Fade animation (Corutine)
         ErasedMatchesEnd?.Invoke();
     }
