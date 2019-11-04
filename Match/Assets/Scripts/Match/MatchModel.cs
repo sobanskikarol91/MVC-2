@@ -7,8 +7,8 @@ using UnityEngine;
 public class MatchModel : IMatchModel
 {
     public event EventHandler<SwapEventArgs> Swap;
-    public event EventHandler<MatchesEventArgs> FoundMatchesSuccessful;
-    public event EventHandler<MatchesEventArgs> ErasingMatches;
+    public event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
+    public event EventHandler<EraseContentEventArgs> ErasingMatches;
 
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
@@ -86,22 +86,40 @@ public class MatchModel : IMatchModel
 
     private void OnMatchesFound()
     {
-        FoundMatchesSuccessful?.Invoke(this, new MatchesEventArgs(foundedMatches));
+        FoundMatchesSuccessful?.Invoke(this, new FoundMatchesEventArgs(foundedMatches));
     }
 
     // Create new class for this content
     public void OnErasingMatches()
     {
-        Debug.Log("Founded matches on erasing: " + foundedMatches.Count);
+        GameObject[] contentToErase = foundedMatches.Select(f => f.Content).ToArray();
         foundedMatches.ForEach(c => c.Content = null);
-        ErasingMatches?.Invoke(this, new MatchesEventArgs(foundedMatches));
-
+        ErasingMatches?.Invoke(this, new EraseContentEventArgs(contentToErase));
     }
 
     public void ShiftTiles()
     {
-        Debug.Log("Shifting Tiles...");
         tileShifter.ShiftDownTiles();
+    }
+}
+
+public class EraseContentEventArgs : EventArgs
+{
+    public GameObject[] ToErase { get; }
+
+    public EraseContentEventArgs(GameObject[] toErase)
+    {
+        ToErase = toErase;
+    }
+}
+
+public class FoundMatchesEventArgs : EventArgs
+{
+    public Vector2[] Positions { get; }
+
+    public FoundMatchesEventArgs(List<ISlotModel> matches)
+    {
+        Positions = matches.Select(m => m.Position).ToArray();
     }
 }
 
@@ -117,21 +135,11 @@ public class SwapEventArgs : EventArgs
     public ISlotModel Slot2 { get; private set; }
 }
 
-public class MatchesEventArgs : EventArgs
-{
-    public Vector2[] Positions { get; }
-
-    public MatchesEventArgs(List<ISlotModel> matches)
-    {
-        Positions = matches.Select(m => m.Position).ToArray();
-    }
-}
-
 public interface IMatchModel
 {
     event EventHandler<SwapEventArgs> Swap;
-    event EventHandler<MatchesEventArgs> FoundMatchesSuccessful;
-    event EventHandler<MatchesEventArgs> ErasingMatches;
+    event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
+    event EventHandler<EraseContentEventArgs> ErasingMatches;
 
     int SequenceLength { get; }
     IBoardModel Board { get; }

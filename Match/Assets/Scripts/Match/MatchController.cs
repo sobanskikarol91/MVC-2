@@ -14,15 +14,15 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         model.ErasingMatches += HandleEraseMatches;
 
         view.HighlightedMatchesEnd += model.OnErasingMatches;
-        //view.ErasedMatchesEnd += model.ShiftTiles;
+        view.ErasedMatchesEnd += model.ShiftTiles;
     }
 
-    private void HandleEraseMatches(object sender, MatchesEventArgs e)
+    private void HandleEraseMatches(object sender, EraseContentEventArgs e)
     {
-        view.EraseMatches(e.Positions);
+        view.EraseMatches(e.ToErase);
     }
 
-    private void HandleFoundMatches(object sender, MatchesEventArgs e)
+    private void HandleFoundMatches(object sender, FoundMatchesEventArgs e)
     {
         view.HighlightMatches(e.Positions);
     }

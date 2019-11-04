@@ -24,51 +24,38 @@ public class MatchTileShifter
 
     private void FindEmptySlots()
     {
-        for (int r = 0; r < rows; r++)
+        for (int c = 0; c < columns; c++)
         {
-            for (int c = 0; c < columns; c++)
+            for (int r = rows - 1; r >= 0; r--)
             {
                 if (slots[r, c].Content == null)
                 {
-                    Debug.Log("Empty found");
+                    Debug.Log("Empty found: (" + r + " " + c + ")");
                     ShiftTilesDown(r, c);
                 }
-                else
-                    Debug.Log("Not null: " + r + " " + c, slots[r, c].Content);
             }
         }
     }
 
-    private void ShiftTilesDown(int r, int cStart)
+    private void ShiftTilesDown(int rStart, int c)
     {
-        List<ISlotModel> emptySlots = new List<ISlotModel>();
-        int shiftStep = 0;
-
-        for (int y = cStart; y < columns; y++)
+        for (int r = rStart; r >= 1; r--)
         {
-            GameObject content = slots[r, y].Content;
+            GameObject content = slots[r, c].Content;
 
-            if (content == null)
-                shiftStep++;
+            Debug.Log("(" + r + " " + c + ") Shift: " + slots[r, c].Position + " to: " + slots[r - 1, c].Position);
 
-            emptySlots.Add(slots[r, y]);
+            slots[r, c].Content = slots[r - 1, c].Content;
+
+            shiftResultArgs.AddShift(slots[r, c].Position, slots[r - 1, c].Position);
         }
 
-        for (int i = 0; i < shiftStep; i++)
-        {
-            for (int k = 0; k < emptySlots.Count - 1; k++)
-            {
-                Debug.Log("Shift");
-                emptySlots[k].Content = emptySlots[k + 1].Content;
-                emptySlots[k + 1].Content = null;
-
-                shiftResultArgs.AddShift(emptySlots[k].Position, emptySlots[k + 1].Position);
-            }
-        }
+        if (slots[rStart, c].Content == null)
+            ShiftTilesDown(rStart, c);
 
         for (int i = 0; i < shiftResultArgs.Result.Count; i++)
         {
-            Debug.Log(shiftResultArgs.Result[i].Origin + shiftResultArgs.Result[i].Destination);
+            Debug.Log(shiftResultArgs.Result[i].Origin + " " + shiftResultArgs.Result[i].Destination);
         }
     }
 }
@@ -94,3 +81,4 @@ public class ShiftResult
         Destination = destination;
     }
 }
+

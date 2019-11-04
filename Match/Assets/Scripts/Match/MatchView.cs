@@ -23,11 +23,12 @@ public class MatchView : IMatchView
         HighlightedMatchesEnd?.Invoke();
     }
 
-    public void EraseMatches(Vector2[] matches)
+    public void EraseMatches(GameObject[] matches)
     {
-        //Debug.Log(matches.Length);
-        //Action<int, int> action = (row, columns) => Board.Slots[row, columns].Content.SetActive(false);
-        //DoActionForMatches(matches, action);
+        for (int i = 0; i < matches.Length; i++)
+            matches[i].SetActive(false);
+
+        // TODO: Fade animation (Corutine)
         ErasedMatchesEnd?.Invoke();
     }
 
@@ -42,13 +43,18 @@ public class MatchView : IMatchView
         }
     }
 
-    public void ShiftTiles(List<Vector2[,]> origin, List<Vector2[,]> destination)
+    public void ShiftTiles(List<ShiftResult> Result)
     {
-    }
+        for (int i = 0; i < Result.Count; i++)
+        {
+            Vector2 origin = Result[i].Origin;
+            Vector2 destination = Result[i].Destination;
 
-    public void ShiftTiles(Vector2[,] origin, Vector2[,] destination)
-    {
-      
+            Transform Tile = Board.Slots[(int)origin.x, (int)origin.y].Content.transform;
+            Vector2 destinationPosition = Board.Slots[(int)origin.x, (int)origin.y].Content.transform.position;
+
+            Tile.position = destination;
+        }
     }
 }
 
@@ -58,8 +64,8 @@ public interface IMatchView
     event Action ErasedMatchesEnd;
     IBoardView Board { get; }
     void HighlightMatches(Vector2[] matches);
-    void EraseMatches(Vector2[] matches);
-    void ShiftTiles(Vector2[,] origin, Vector2[,] destination);
+    void EraseMatches(GameObject[] matches);
+    void ShiftTiles(List<ShiftResult> Result);
 }
 
 public interface IMatchViewFactory
