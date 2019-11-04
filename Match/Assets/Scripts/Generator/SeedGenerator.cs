@@ -3,7 +3,7 @@
 
 public static class SeedGenerator
 {
-    public static void SetRandomNotRepeatingCollection<T>(ref T[,] data, T[] variants, int colorsAmount, int seed)
+    public static void SetRandomNotRepeatingCollection<T>(ref T[,] data, T[] variants, int seed)
     {
         int rows = data.GetLength(0);
         int columns = data.GetLength(1);

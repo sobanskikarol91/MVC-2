@@ -33,7 +33,7 @@ public class ApplicationController : MonoBehaviour
     GameObject[,] GetRandomGameObjects()
     {
         Color[,] colors = new Color[rows, columns];
-        SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.ColorsAmount, settings.Seed);
+        SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.Seed);
 
         GameObject TilePrefab = settings.TilePrefab;
         GameObject[,] tiles = new GameObject[rows, columns];
