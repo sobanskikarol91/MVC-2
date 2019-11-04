@@ -6,8 +6,7 @@ public class MatchTileShifter
     private readonly int rows;
     private readonly int columns;
     private readonly ISlotModel[,] slots;
-    private int emptySlotsInColumn=0;
-
+    private int emptySlotsInColumn = 0;
 
     public MatchTileShifter(ISlotModel[,] slots)
     {
@@ -25,31 +24,48 @@ public class MatchTileShifter
     {
         for (int c = 0; c < columns; c++)
         {
-            for (int r = rows - 1; r >= emptySlotsInColumn; r--)
+           CountEmptySlots(c);
+
+            for (int r = rows - 1; r >= 0; r--)
             {
                 if (slots[r, c].Content == null)
                 {
                     ShiftTilesDown(r, c);
+                    SetEmptySlotsOnColumnTop(c);
+                    break;
                 }
             }
+        }
+    }
 
-            emptySlotsInColumn = 0;
+    void CountEmptySlots(int c)
+    {
+       emptySlotsInColumn = 0;
+
+        for (int r = 0; r < rows; r++)
+        {
+            if (slots[r, c].Content == null)
+                emptySlotsInColumn++;
         }
     }
 
     private void ShiftTilesDown(int rStart, int c)
     {
-        emptySlotsInColumn++;
+        Debug.Log(rStart + " " + emptySlotsInColumn);
 
-        for (int r = rStart; r >= 1; r--)
+        for (int r = rStart; r >= emptySlotsInColumn; r--)
         {
             GameObject content = slots[r, c].Content;
-            slots[r, c].Content = slots[r - 1, c].Content;
+            Debug.Log(slots[r, c].Position + " New: " + (r - emptySlotsInColumn) );
+            slots[r, c].Content = slots[r - emptySlotsInColumn, c].Content;
         }
+    }
 
-        slots[0, c].Content = null;
-
-        if (rStart != 0 && slots[rStart, c].Content == null)
-            ShiftTilesDown(rStart, c);
+    void SetEmptySlotsOnColumnTop(int c)
+    {
+        for (int r = 0; r < emptySlotsInColumn; r++)
+        {
+            slots[r, c].Content = null;
+        }
     }
 }

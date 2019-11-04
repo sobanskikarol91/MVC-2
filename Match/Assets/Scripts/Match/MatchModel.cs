@@ -102,7 +102,7 @@ public class MatchModel : IMatchModel
     {
         tileShifter.ShiftDownTiles();
         FillEmptyTiles();
-        //FindMatch();
+        FindMatch();
     }
 
     ISlotModel[] GetEmptySlots()
@@ -114,8 +114,6 @@ public class MatchModel : IMatchModel
             {
                 if (Board.Slots[r, c].Content == null)
                     emptySlots.Add(Board.Slots[r, c]);
-                else
-                    Debug.Log(Board.Slots[r, c].Position, Board.Slots[r, c].Content);
             }
         }
 
@@ -132,9 +130,8 @@ public class MatchModel : IMatchModel
             int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
             GameObject randomGO = SlotContentVariants[nr];
 
-            Debug.Log("Filling: " + emptySlots[i].Position, emptySlots[i].Content);
+           // Debug.Log("Filling: " + emptySlots[i].Position, emptySlots[i].Content);
             emptySlots[i].Content = GameObject.Instantiate(randomGO);
-
         }
     }
 }
