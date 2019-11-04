@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18038a8b2dcda6146acd5f30060b972b, type: 3}
   m_Name: ApplicationModel
   m_EditorClassIdentifier: 
-  colorsAmount: 0
+  colorsAmount: 6
   seed: 55
   height: 5
   width: 4

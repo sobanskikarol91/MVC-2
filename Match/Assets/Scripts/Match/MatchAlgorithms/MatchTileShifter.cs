@@ -28,7 +28,6 @@ public class MatchTileShifter
             {
                 if (slots[r, c].Content == null)
                 {
-                    Debug.Log("Empty found: (" + r + " " + c + ")");
                     ShiftTilesDown(r, c);
                 }
             }
@@ -40,12 +39,12 @@ public class MatchTileShifter
         for (int r = rStart; r >= 1; r--)
         {
             GameObject content = slots[r, c].Content;
-            Debug.Log("(" + r + " " + c + ") Shift: " + slots[r, c].Position + " to: " + slots[r - 1, c].Position);
-
             slots[r, c].Content = slots[r - 1, c].Content;
         }
 
-        if (slots[rStart, c].Content == null)
+        slots[0, c].Content = null;
+
+        if (rStart != 0 && slots[rStart, c].Content == null)
             ShiftTilesDown(rStart, c);
     }
 }

@@ -12,6 +12,7 @@ public class MatchModel : IMatchModel
 
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
+    public GameObject[] SlotContentVariants { get; }
 
     private List<ISlotModel> selectedSlots = new List<ISlotModel>();
     private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
@@ -19,8 +20,10 @@ public class MatchModel : IMatchModel
     private List<ISlotModel> foundedMatches = new List<ISlotModel>();
 
 
-    public MatchModel(IBoardModel board, int sequenceLength)
+
+    public MatchModel(IBoardModel board, int sequenceLength, GameObject[] slotContentVariants)
     {
+        SlotContentVariants = slotContentVariants;
         SequenceLength = sequenceLength;
         Board = board;
         tileShifter = new MatchTileShifter(Board.Slots);
@@ -100,6 +103,40 @@ public class MatchModel : IMatchModel
     public void ShiftTiles()
     {
         tileShifter.ShiftDownTiles();
+        FillEmptyTiles();
+    }
+
+    ISlotModel[] GetEmptySlots()
+    {
+        List<ISlotModel> emptySlots = new List<ISlotModel>();
+        for (int r = 0; r < Board.Rows; r++)
+        {
+            for (int c = 0; c < Board.Columns; c++)
+            {
+                if (Board.Slots[r, c].Content == null)
+                    emptySlots.Add(Board.Slots[r, c]);
+                else
+                    Debug.Log(Board.Slots[r, c].Position, Board.Slots[r, c].Content);
+            }
+        }
+
+        return emptySlots.ToArray();
+    }
+
+    void FillEmptyTiles()
+    {
+        ISlotModel[] emptySlots = GetEmptySlots();
+        Debug.Log("Fill empty spaces");
+
+        for (int i = 0; i < emptySlots.Length; i++)
+        {
+            int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
+            GameObject randomGO = SlotContentVariants[nr];
+
+            Debug.Log(emptySlots[i].Position, emptySlots[i].Content);
+            emptySlots[i].Content = GameObject.Instantiate(randomGO);
+
+        }
     }
 }
 
@@ -143,6 +180,7 @@ public interface IMatchModel
 
     int SequenceLength { get; }
     IBoardModel Board { get; }
+    GameObject[] SlotContentVariants { get; }
 
     void SelectedSlot(ISlotModel newSelectedTile);
     void OnErasingMatches();

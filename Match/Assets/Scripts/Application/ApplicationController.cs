@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class ApplicationController : MonoBehaviour
@@ -8,7 +7,6 @@ public class ApplicationController : MonoBehaviour
 
     private int rows;
     private int columns;
-
     IBoardModel boardModel;
     IBoardView boardView;
     IBoardController boardController;
@@ -25,7 +23,19 @@ public class ApplicationController : MonoBehaviour
 
     private void CreateMatch()
     {
-        IMatchModel model = new MatchModel(boardModel, settings.MatchSequenceLength);
+
+        GameObject[] slotContentPrefabs = new GameObject[settings.ColorsAmount];
+
+        for (int i = 0; i < slotContentPrefabs.Length; i++)
+        {
+            GameObject instance = slotContentPrefabs[i] = Instantiate(settings.TilePrefab);
+
+            int nr = Random.Range(0, settings.ColorsAmount);
+            instance.GetComponent<Image>().color = settings.TileColors[nr];
+        }
+
+
+        IMatchModel model = new MatchModel(boardModel, settings.MatchSequenceLength, slotContentPrefabs);
         IMatchView view = new MatchView(boardView);
         IMatchController controller = new MatchController(model, view);
     }
