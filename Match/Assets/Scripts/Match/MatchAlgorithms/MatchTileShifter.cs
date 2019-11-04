@@ -51,12 +51,9 @@ public class MatchTileShifter
 
     private void ShiftTilesDown(int rStart, int c)
     {
-        Debug.Log(rStart + " " + emptySlotsInColumn);
-
         for (int r = rStart; r >= emptySlotsInColumn; r--)
         {
             GameObject content = slots[r, c].Content;
-            Debug.Log(slots[r, c].Position + " New: " + (r - emptySlotsInColumn) );
             slots[r, c].Content = slots[r - emptySlotsInColumn, c].Content;
         }
     }

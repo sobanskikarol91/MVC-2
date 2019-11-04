@@ -1,24 +1,33 @@
 ﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
 
-public class MatchView : IMatchView
+public class MatchView : MonoBehaviour, IMatchView
 {
     public event Action HighlightedMatchesEnd;
     public event Action ErasedMatchesEnd;
-    public IBoardView Board { get; }
+    public IBoardView Board { get; private set; }
 
+    private float animationTime = 0.2f;
 
-    public MatchView(IBoardView board)
+    public void Init(IBoardView board)
     {
         Board = board;
     }
 
     public void HighlightMatches(Vector2[] matches)
     {
+        StartCoroutine(IEHighlightedMatch(matches));
+    }
+
+    IEnumerator IEHighlightedMatch(Vector2[] matches)
+    {
         Action<int, int> action = (row, columns) => Board.Slots[row, columns].Content.GetComponent<Image>().color = Color.black;
         DoActionForMatches(matches, action);
+
+        yield return new WaitForSeconds(animationTime);
         HighlightedMatchesEnd?.Invoke();
     }
 
@@ -46,6 +55,7 @@ public class MatchView : IMatchView
 
 public interface IMatchView
 {
+    void Init(IBoardView board);
     event Action HighlightedMatchesEnd;
     event Action ErasedMatchesEnd;
     IBoardView Board { get; }
@@ -62,6 +72,6 @@ public class MatchViewFactory : IMatchViewFactory
 {
     public IMatchView Create(IBoardView board)
     {
-        return new MatchView(board);
+        return new MatchView();
     }
 }

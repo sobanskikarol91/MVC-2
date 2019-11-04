@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
+
 public class ApplicationController : MonoBehaviour
 {
     [SerializeField] ApplicationModel settings;
 
     private int rows;
     private int columns;
+
     IBoardModel boardModel;
     IBoardView boardView;
     IBoardController boardController;
@@ -16,14 +18,13 @@ public class ApplicationController : MonoBehaviour
     {
         rows = settings.Rows;
         columns = settings.Columns;
-        GameObject[,] slotContent = GetRandomGameObjects();
+        GameObject[,] slotContent = GetRandomTiles();
         CreateBoard(slotContent);
         CreateMatch();
     }
 
     private void CreateMatch()
     {
-
         GameObject[] slotContentPrefabs = new GameObject[settings.ColorsAmount];
 
         for (int i = 0; i < slotContentPrefabs.Length; i++)
@@ -34,13 +35,15 @@ public class ApplicationController : MonoBehaviour
             instance.GetComponent<Image>().color = settings.TileColors[nr];
         }
 
-
+        // I can use here factory pattern.
         IMatchModel model = new MatchModel(boardModel, settings.MatchSequenceLength, slotContentPrefabs);
-        IMatchView view = new MatchView(boardView);
+        IMatchView view = new GameObject("MatchView").AddComponent<MatchView>();
+        view.Init(boardView);
+
         IMatchController controller = new MatchController(model, view);
     }
 
-    GameObject[,] GetRandomGameObjects()
+    GameObject[,] GetRandomTiles()
     {
         Color[,] colors = new Color[rows, columns];
         SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.Seed);
