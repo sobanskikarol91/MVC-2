@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Linq;
-using UnityEngine;
+
 
 public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchController
 {
@@ -14,19 +13,18 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         model.FoundMatchesSuccessful += HandleFoundMatches;
         model.ErasingMatches += HandleEraseMatches;
 
-        view.HighlightedMatchesEnd += model.OnErasingMatches; 
+        view.HighlightedMatchesEnd += model.OnErasingMatches;
+        //view.ErasedMatchesEnd += model.ShiftTiles;
     }
 
     private void HandleEraseMatches(object sender, MatchesEventArgs e)
     {
-        Vector2[] positions = e.Matches.Select(m => m.Position).ToArray();
-        view.EraseMatches(positions);
+        view.EraseMatches(e.Positions);
     }
 
     private void HandleFoundMatches(object sender, MatchesEventArgs e)
     {
-        Vector2[] positions = e.Matches.Select(m => m.Position).ToArray();
-        view.HighlightMatches(positions);
+        view.HighlightMatches(e.Positions);
     }
 
     private void HandleSwap(object sender, SwapEventArgs e)

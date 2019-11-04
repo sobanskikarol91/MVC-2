@@ -15,6 +15,7 @@ public class MatchModel : IMatchModel
 
     private List<ISlotModel> selectedSlots = new List<ISlotModel>();
     private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
+    private MatchTileShifter tileShifter;                          // TODO: Create interfaces for it.
     private List<ISlotModel> foundedMatches = new List<ISlotModel>();
 
 
@@ -22,6 +23,7 @@ public class MatchModel : IMatchModel
     {
         SequenceLength = sequenceLength;
         Board = board;
+        tileShifter = new MatchTileShifter(Board.Slots);
     }
 
     public void SelectedSlot(ISlotModel newSelected)
@@ -90,8 +92,16 @@ public class MatchModel : IMatchModel
     // Create new class for this content
     public void OnErasingMatches()
     {
-        foundedMatches.Select(c => c.Content = null);
+        Debug.Log("Founded matches on erasing: " + foundedMatches.Count);
+        foundedMatches.ForEach(c => c.Content = null);
         ErasingMatches?.Invoke(this, new MatchesEventArgs(foundedMatches));
+
+    }
+
+    public void ShiftTiles()
+    {
+        Debug.Log("Shifting Tiles...");
+        tileShifter.ShiftDownTiles();
     }
 }
 
@@ -109,11 +119,11 @@ public class SwapEventArgs : EventArgs
 
 public class MatchesEventArgs : EventArgs
 {
-    public List<ISlotModel> Matches { get; } = new List<ISlotModel>();
+    public Vector2[] Positions { get; }
 
     public MatchesEventArgs(List<ISlotModel> matches)
     {
-        Matches = matches;
+        Positions = matches.Select(m => m.Position).ToArray();
     }
 }
 
@@ -129,4 +139,5 @@ public interface IMatchModel
     void SelectedSlot(ISlotModel newSelectedTile);
     void OnErasingMatches();
     void FindMatch();
+    void ShiftTiles();
 }

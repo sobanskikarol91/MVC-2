@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,8 +25,9 @@ public class MatchView : IMatchView
 
     public void EraseMatches(Vector2[] matches)
     {
-        Action<int, int> action = (row, columns) => Board.Slots[row, columns].Content.SetActive(false);
-        DoActionForMatches(matches, action);
+        //Debug.Log(matches.Length);
+        //Action<int, int> action = (row, columns) => Board.Slots[row, columns].Content.SetActive(false);
+        //DoActionForMatches(matches, action);
         ErasedMatchesEnd?.Invoke();
     }
 
@@ -39,6 +41,15 @@ public class MatchView : IMatchView
             DoAction(row, columns);
         }
     }
+
+    public void ShiftTiles(List<Vector2[,]> origin, List<Vector2[,]> destination)
+    {
+    }
+
+    public void ShiftTiles(Vector2[,] origin, Vector2[,] destination)
+    {
+      
+    }
 }
 
 public interface IMatchView
@@ -48,6 +59,7 @@ public interface IMatchView
     IBoardView Board { get; }
     void HighlightMatches(Vector2[] matches);
     void EraseMatches(Vector2[] matches);
+    void ShiftTiles(Vector2[,] origin, Vector2[,] destination);
 }
 
 public interface IMatchViewFactory
