@@ -74,14 +74,12 @@ public class MatchModel : IMatchModel
     void FillEmptyTiles()
     {
         ISlotModel[] emptySlots = GetEmptySlots();
-        Debug.Log("Fill empty spaces");
 
         for (int i = 0; i < emptySlots.Length; i++)
         {
             int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
             GameObject randomGO = SlotContentVariants[nr];
 
-           // Debug.Log("Filling: " + emptySlots[i].Position, emptySlots[i].Content);
             emptySlots[i].Content = GameObject.Instantiate(randomGO);
         }
     }
