@@ -81,7 +81,7 @@ public class MatchModel : IMatchModel
     {
         foundedMatches = matchSearcher.GetMatchSequences(Board, SequenceLength, new MatchColorComparation());
 
-        Debug.Log("Matches:" + foundedMatches.Count);
+        Debug.Log("Matches:" + foundedMatches.Count + foundedMatches[0].Position);
 
         if (foundedMatches.Count > 0)
             OnMatchesFound();
@@ -133,7 +133,7 @@ public class MatchModel : IMatchModel
             int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
             GameObject randomGO = SlotContentVariants[nr];
 
-            Debug.Log(emptySlots[i].Position, emptySlots[i].Content);
+            Debug.Log("Filling: " + emptySlots[i].Position, emptySlots[i].Content);
             emptySlots[i].Content = GameObject.Instantiate(randomGO);
 
         }

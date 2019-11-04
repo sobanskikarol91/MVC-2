@@ -8,12 +8,13 @@ public class MatchSearcher : MonoBehaviour
 {
     private ISlotModel previousSlot, currentSlot;
     private int sequenceLength = 3;
-    private List<ISlotModel> matchingSlotsToErase = new List<ISlotModel>();
+    private List<ISlotModel> matchingSlotsToErase;
     private ICompareGameObjects comparison;
 
 
     public List<ISlotModel> GetMatchSequences(IBoardModel board, int sequenceLength, ICompareGameObjects comparison)
     {
+        matchingSlotsToErase = new List<ISlotModel>();
         this.comparison = comparison;
         this.sequenceLength = sequenceLength;
         SearchRows(board);
@@ -26,7 +27,6 @@ public class MatchSearcher : MonoBehaviour
     {
         List<ISlotModel> matches = new List<ISlotModel>();
 
-        // nie sprawdzac ostatnich
         for (int r = 0; r < board.Rows; r++)
         {
             for (int c = 0; c < board.Columns; c++)
@@ -46,7 +46,6 @@ public class MatchSearcher : MonoBehaviour
     {
         List<ISlotModel> matches = new List<ISlotModel>();
 
-        // nie sprawdzac ostatnich
         for (int c = 0; c < board.Columns; c++)
         {
             for (int r = 0; r < board.Rows; r++)
@@ -91,8 +90,7 @@ public class MatchSearcher : MonoBehaviour
 
     private bool IsTheSameAsPreviousSlot()
     {
-        // po losowaniu mozna wywalic nulla
-        if (currentSlot.Content == null || previousSlot.Content == null) return false;
+        if (previousSlot.Content == null) return false;
 
         List<GameObject> toCompare = new List<GameObject> { currentSlot.Content, previousSlot.Content };
         return comparison.AreEqual(toCompare);
