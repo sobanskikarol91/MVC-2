@@ -12,9 +12,13 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         model.Interaction.Swap += HandleSwap;
         model.FoundMatchesSuccessful += HandleFoundMatches;
         model.ErasingMatches += HandleEraseMatches;
+        model.Shifting += view.ShiftingAnimation;
+        model.FillingEmptySlots += view.FillingEmptySlotes;
 
         view.HighlightedMatchesEnd += model.OnErasingMatches;
-        view.ErasedMatchesEnd += model.ShiftTiles;
+        view.ErasedMatchesEnd += model.OnShiftTiles;
+        view.ShiftingEnd += model.OnFillEmptySlots;
+        view.FillingEmptySlotesEnd += model.FindMatch;
     }
 
     private void HandleEraseMatches(object sender, EraseContentEventArgs e)

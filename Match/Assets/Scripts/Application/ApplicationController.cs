@@ -35,7 +35,7 @@ public class ApplicationController : MonoBehaviour
             instance.GetComponent<Image>().color = settings.TileColors[nr];
         }
 
-        // I can use here factory pattern.
+        // I can use here factory pattern, but I haven't time for it...
         IMatchModel model = new MatchModel(boardModel, settings.MatchSequenceLength, slotContentPrefabs);
         IMatchView view = new GameObject("MatchView").AddComponent<MatchView>();
         view.Init(boardView);
@@ -43,7 +43,7 @@ public class ApplicationController : MonoBehaviour
         IMatchController controller = new MatchController(model, view);
     }
 
-    GameObject[,] GetRandomTiles()
+    private GameObject[,] GetRandomTiles()
     {
         Color[,] colors = new Color[rows, columns];
         SeedGenerator.SetRandomNotRepeatingCollection(ref colors, settings.TileColors, settings.Seed);

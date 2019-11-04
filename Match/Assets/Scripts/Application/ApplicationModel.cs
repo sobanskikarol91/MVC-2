@@ -1,9 +1,10 @@
 ﻿using UnityEngine;
 
+
 [CreateAssetMenu(fileName = "ApplicationModel", menuName = "Game/Application/Model")]
 public class ApplicationModel : ScriptableObject
 {
-    public int ColorsAmount { get => colorsAmount; }
+    public int ColorsAmount { get => tileColors.Length; }
     public int Seed { get => seed; }
     public int Rows { get => height; }
     public int Columns { get => width; }
@@ -11,12 +12,10 @@ public class ApplicationModel : ScriptableObject
     public int MatchSequenceLength { get => matchSequenceLength; }
     public GameObject TilePrefab { get => tilePrefab; }
 
-    // TODO: Create custom inspector for this parametr
-    [SerializeField, Range(0, 6)] int colorsAmount;
     [SerializeField] int seed;
     [SerializeField] int height;
     [SerializeField] int width;
-    [SerializeField] Color[] tileColors;
     [SerializeField] int matchSequenceLength = 3;
+    [SerializeField] Color[] tileColors;
     [SerializeField] GameObject tilePrefab;
 }

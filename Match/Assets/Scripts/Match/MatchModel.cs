@@ -8,6 +8,8 @@ public class MatchModel : IMatchModel
 {
     public event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
     public event EventHandler<EraseContentEventArgs> ErasingMatches;
+    public event Action Shifting;
+    public event Action FillingEmptySlots;
 
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
@@ -16,8 +18,8 @@ public class MatchModel : IMatchModel
 
     private MatchSearcher matchSearcher = new MatchSearcher();     // TODO: Create interfaces for it.
     private MatchTileShifter tileShifter;                          // TODO: Create interfaces for it.
-
     private List<ISlotModel> foundedMatches = new List<ISlotModel>();
+
 
     public MatchModel(IBoardModel board, int sequenceLength, GameObject[] slotContentVariants)
     {
@@ -49,11 +51,25 @@ public class MatchModel : IMatchModel
         ErasingMatches?.Invoke(this, new EraseContentEventArgs(contentToErase));
     }
 
-    public void ShiftTiles()
+    public void OnShiftTiles()
     {
         tileShifter.ShiftDownTiles();
-        FillEmptyTiles();
-        FindMatch();
+        Shifting?.Invoke();
+    }
+
+    public void OnFillEmptySlots()
+    {
+        ISlotModel[] emptySlots = GetEmptySlots();
+
+        for (int i = 0; i < emptySlots.Length; i++)
+        {
+            int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
+            GameObject randomGO = SlotContentVariants[nr];
+
+            emptySlots[i].Content = GameObject.Instantiate(randomGO);
+        }
+
+        FillingEmptySlots?.Invoke();
     }
 
     ISlotModel[] GetEmptySlots()
@@ -69,19 +85,6 @@ public class MatchModel : IMatchModel
         }
 
         return emptySlots.ToArray();
-    }
-
-    void FillEmptyTiles()
-    {
-        ISlotModel[] emptySlots = GetEmptySlots();
-
-        for (int i = 0; i < emptySlots.Length; i++)
-        {
-            int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
-            GameObject randomGO = SlotContentVariants[nr];
-
-            emptySlots[i].Content = GameObject.Instantiate(randomGO);
-        }
     }
 }
 
@@ -121,13 +124,16 @@ public interface IMatchModel
 {
     event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
     event EventHandler<EraseContentEventArgs> ErasingMatches;
+    event Action Shifting;
+    event Action FillingEmptySlots;
 
     MatchInteraction Interaction { get; }
     int SequenceLength { get; }
     IBoardModel Board { get; }
     GameObject[] SlotContentVariants { get; }
 
+    void OnFillEmptySlots();
     void OnErasingMatches();
     void FindMatch();
-    void ShiftTiles();
+    void OnShiftTiles();
 }

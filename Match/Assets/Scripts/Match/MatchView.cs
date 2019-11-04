@@ -8,9 +8,13 @@ public class MatchView : MonoBehaviour, IMatchView
 {
     public event Action HighlightedMatchesEnd;
     public event Action ErasedMatchesEnd;
+    public event Action ShiftingEnd;
+    public event Action FillingEmptySlotesEnd;
+
     public IBoardView Board { get; private set; }
 
-    private float animationTime = 0.2f;
+    private float animationTime = 0.4f;
+    private float fillingTime = 1f;
 
     public void Init(IBoardView board)
     {
@@ -36,7 +40,6 @@ public class MatchView : MonoBehaviour, IMatchView
         for (int i = 0; i < matches.Length; i++)
             matches[i].SetActive(false);
 
-
         // TODO: Fade animation (Corutine)
         ErasedMatchesEnd?.Invoke();
     }
@@ -51,16 +54,43 @@ public class MatchView : MonoBehaviour, IMatchView
             DoAction(row, columns);
         }
     }
+
+    public void ShiftingAnimation()
+    {
+        StartCoroutine(IEShifting());
+    }
+
+    IEnumerator IEShifting()
+    {
+        yield return new WaitForSeconds(animationTime);
+        ShiftingEnd?.Invoke();
+    }
+
+    public void FillingEmptySlotes()
+    {
+        StartCoroutine(IEFillingEmptySltoes());
+    }
+
+    IEnumerator IEFillingEmptySltoes()
+    {
+        yield return new WaitForSeconds(fillingTime);
+        FillingEmptySlotesEnd?.Invoke();
+    }
 }
 
 public interface IMatchView
 {
-    void Init(IBoardView board);
     event Action HighlightedMatchesEnd;
+    event Action ShiftingEnd;
     event Action ErasedMatchesEnd;
+    event Action FillingEmptySlotesEnd;
+
     IBoardView Board { get; }
+    void Init(IBoardView board);
     void HighlightMatches(Vector2[] matches);
     void EraseMatches(GameObject[] matches);
+    void ShiftingAnimation();
+    void FillingEmptySlotes();
 }
 
 public interface IMatchViewFactory
