@@ -34,7 +34,6 @@ public class MatchSearcher : MonoBehaviour
                 currentSlot = board.Slots[r, c];
                 CheckTileInSequence(matches);
                 previousSlot = currentSlot;
-               // Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
             }
 
             CheckIfSequenceIsLongEnough(matches);
@@ -53,7 +52,6 @@ public class MatchSearcher : MonoBehaviour
                 currentSlot = board.Slots[r, c];
                 CheckTileInSequence(matches);
                 previousSlot = currentSlot;
-               // Debug.Log(board.Slots[r, c].Position + "Matching Amount:" + matches.Count);
             }
 
             CheckIfSequenceIsLongEnough(matches);

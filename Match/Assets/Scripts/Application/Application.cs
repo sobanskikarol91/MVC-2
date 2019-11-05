@@ -23,10 +23,25 @@ public class Application : MonoBehaviour
         CreateMatch();
     }
 
+    void CreateBoard(GameObject[,] slotContent)
+    {
+        BoardModelFactory modelFactory = new BoardModelFactory();
+        boardModel = modelFactory.Create(new SlotModelFactory(), rows, columns);
+
+        BoardViewFactory viewFactory = new BoardViewFactory();
+        boardView = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);
+
+        BoardControllerFactory controllerFactory = new BoardControllerFactory();
+        boardController = controllerFactory.Create(new SlotControllerFactory(), boardModel, boardView);
+
+        boardModel.SetSlotsContent(slotContent);
+    }
+
     private void CreateMatch()
     {
         GameObject[] slotContentPrefabs = new GameObject[settings.ColorsAmount];
 
+        // yeaa this is an ugly solution... A better idea is to use here object pool pattern, but I don't want to complate this project to much
         for (int i = 0; i < slotContentPrefabs.Length; i++)
         {
             GameObject instance = slotContentPrefabs[i] = Instantiate(settings.TilePrefab);
@@ -61,19 +76,5 @@ public class Application : MonoBehaviour
         }
 
         return tiles;
-    }
-
-    void CreateBoard(GameObject[,] slotContent)
-    {
-        BoardModelFactory modelFactory = new BoardModelFactory();
-        boardModel = modelFactory.Create(new SlotModelFactory(), rows, columns);
-
-        BoardViewFactory viewFactory = new BoardViewFactory();
-        boardView = viewFactory.Create(new SlotViewFactory(), rows, columns, transform);
-
-        BoardControllerFactory controllerFactory = new BoardControllerFactory();
-        boardController = controllerFactory.Create(new SlotControllerFactory(), boardModel, boardView);
-
-        boardModel.SetSlotsContent(slotContent);
     }
 }

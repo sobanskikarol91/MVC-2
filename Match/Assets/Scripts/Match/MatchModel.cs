@@ -74,6 +74,7 @@ public class MatchModel : IMatchModel
             int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
             GameObject randomGO = SlotContentVariants[nr];
 
+            // a better idea is to use here object pool pattern, but I don't want to complate this project to much
             emptySlots[i].Content = GameObject.Instantiate(randomGO);
         }
 
