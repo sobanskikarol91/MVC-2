@@ -39,7 +39,7 @@ public class MatchView : MonoBehaviour, IMatchView
     public void EraseMatches(GameObject[] matches)
     {
         for (int i = 0; i < matches.Length; i++)
-            matches[i].SetActive(false);
+            Destroy(matches[i]);
 
         ErasedMatchesEnd?.Invoke();
     }

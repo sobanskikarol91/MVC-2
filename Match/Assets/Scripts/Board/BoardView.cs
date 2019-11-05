@@ -28,11 +28,36 @@ public class BoardView : MonoBehaviour, IBoardView
         gridLayout.constraint = GridLayoutGroup.Constraint.FixedRowCount;
         gridLayout.constraintCount = slots.GetLength(0);
     }
+
+    public void DisableInteraction()
+    {
+        for (int r = 0; r < slots.GetLength(0); r++)
+        {
+            for (int c = 0; c < slots.GetLength(1); c++)
+            {
+                slots[r, c].DisableInteraction();
+            }
+        }
+    }
+
+    public void EnableInteraction()
+    {
+        for (int r = 0; r < slots.GetLength(0); r++)
+        {
+            for (int c = 0; c < slots.GetLength(1); c++)
+            {
+                slots[r, c].EnableInteraction();
+            }
+        }
+    }
 }
 
 public interface IBoardView
 {
     ISlotView[,] Slots { get; set; }
+
+    void EnableInteraction();
+    void DisableInteraction();
 }
 
 public class BoardViewFactory : IBoardViewFactory
@@ -46,7 +71,7 @@ public class BoardViewFactory : IBoardViewFactory
     {
         this.rows = rows;
         this.columns = columns;
-        this.transform = parent;
+        transform = parent;
         IBoardView view = CreateSelf(parent);
         view.Slots = GetAndCreateSlots(slotFactory);
         return view;
