@@ -14,11 +14,17 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
         model.ErasingMatches += HandleEraseMatches;
         model.Shifting += view.ShiftingAnimation;
         model.FillingEmptySlots += view.FillingEmptySlotes;
+        model.FoundMatchFailed += HandleNoMatchesFound;
 
         view.HighlightedMatchesEnd += model.OnErasingMatches;
         view.ErasedMatchesEnd += model.OnShiftTiles;
         view.ShiftingEnd += model.OnFillEmptySlots;
         view.FillingEmptySlotesEnd += HandleFillingEnd;
+    }
+
+    private void HandleNoMatchesFound()
+    {
+        view.Board.EnableInteraction();
     }
 
     private void HandleFillingEnd()
@@ -29,13 +35,12 @@ public class MatchController : ControllerMVC<IMatchModel, IMatchView>, IMatchCon
     private void HandleEraseMatches(object sender, EraseContentEventArgs e)
     {
         view.EraseMatches(e.ToErase);
-        view.Board.EnableInteraction();
     }
 
     private void HandleFoundMatches(object sender, FoundMatchesEventArgs e)
     {
-        view.HighlightMatches(e.Positions);
         view.Board.DisableInteraction();
+        view.HighlightMatches(e.Positions);
     }
 
     private void HandleSwap(object sender, SwapEventArgs e)

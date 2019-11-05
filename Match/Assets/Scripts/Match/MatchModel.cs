@@ -10,6 +10,7 @@ public class MatchModel : IMatchModel
     public event EventHandler<EraseContentEventArgs> ErasingMatches;
     public event Action Shifting;
     public event Action FillingEmptySlots;
+    public event Action FoundMatchFailed;
 
     public IBoardModel Board { get; }
     public int SequenceLength { get; }
@@ -37,6 +38,13 @@ public class MatchModel : IMatchModel
 
         if (foundedMatches.Count > 0)
             OnMatchesFound();
+        else
+            OnNoMatchesFound();
+    }
+
+    private void OnNoMatchesFound()
+    {
+        FoundMatchFailed?.Invoke();
     }
 
     private void OnMatchesFound()
@@ -63,6 +71,7 @@ public class MatchModel : IMatchModel
 
         for (int i = 0; i < emptySlots.Length; i++)
         {
+            Debug.Log("Fill Empty:" + emptySlots[i].Position);
             int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
             GameObject randomGO = SlotContentVariants[nr];
 
@@ -75,6 +84,7 @@ public class MatchModel : IMatchModel
     ISlotModel[] GetEmptySlots()
     {
         List<ISlotModel> emptySlots = new List<ISlotModel>();
+
         for (int r = 0; r < Board.Rows; r++)
         {
             for (int c = 0; c < Board.Columns; c++)
@@ -124,6 +134,7 @@ public interface IMatchModel
 {
     event EventHandler<FoundMatchesEventArgs> FoundMatchesSuccessful;
     event EventHandler<EraseContentEventArgs> ErasingMatches;
+    event Action FoundMatchFailed;
     event Action Shifting;
     event Action FillingEmptySlots;
 
