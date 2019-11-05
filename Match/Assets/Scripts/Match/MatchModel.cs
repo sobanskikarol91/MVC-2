@@ -71,7 +71,6 @@ public class MatchModel : IMatchModel
 
         for (int i = 0; i < emptySlots.Length; i++)
         {
-            Debug.Log("Fill Empty:" + emptySlots[i].Position);
             int nr = UnityEngine.Random.Range(0, SlotContentVariants.Length);
             GameObject randomGO = SlotContentVariants[nr];
 

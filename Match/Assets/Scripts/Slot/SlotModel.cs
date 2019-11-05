@@ -16,7 +16,6 @@ public class SlotModel : ISlotModel
         get => content;
         set
         {
-            if (content != null && value != null) Debug.LogError("Contains object!");
             if (content == value) return;
 
             content = value;

@@ -6,7 +6,7 @@ public class MatchTileShifter
     private readonly int rows;
     private readonly int columns;
     private readonly ISlotModel[,] slots;
-    private int emptySlotsInColumn = 0;
+    private int emptySlotsInColumn;
 
     public MatchTileShifter(ISlotModel[,] slots)
     {
@@ -24,37 +24,28 @@ public class MatchTileShifter
     {
         for (int c = 0; c < columns; c++)
         {
-           CountEmptySlots(c);
+            emptySlotsInColumn = 0;
 
-            for (int r = rows - 1; r >= 0; r--)
+            for (int r = rows - 1; r > emptySlotsInColumn; r--)
             {
                 if (slots[r, c].Content == null)
                 {
                     ShiftTilesDown(r, c);
-                    SetEmptySlotsOnColumnTop(c);
-                    break;
+                    emptySlotsInColumn++;
+                    r++;
                 }
             }
-        }
-    }
 
-    void CountEmptySlots(int c)
-    {
-       emptySlotsInColumn = 0;
-
-        for (int r = 0; r < rows; r++)
-        {
-            if (slots[r, c].Content == null)
-                emptySlotsInColumn++;
+            SetEmptySlotsOnColumnTop(c);
         }
     }
 
     private void ShiftTilesDown(int rStart, int c)
     {
-        for (int r = rStart; r >= emptySlotsInColumn; r--)
+        for (int r = rStart; r >= emptySlotsInColumn + 1; r--)
         {
             GameObject content = slots[r, c].Content;
-            slots[r, c].Content = slots[r - emptySlotsInColumn, c].Content;
+            slots[r, c].Content = slots[r - 1, c].Content;
         }
     }
 
